@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -99,6 +100,14 @@ DATABASES = {
     }
 }
 
+CHANNEL_LAYERS = {
+        'default' : {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG' : {
+                "hosts" : [('127.0.0.1', 6379)],
+                },
+            },
+        }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -139,22 +148,25 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 ####################################
     ##  CKEDITOR CONFIGURATION ##
 ####################################
 
-CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
 
-CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+CKEDITOR_UPLOAD_PATH = os.path.join(MEDIA_ROOT,'uploads')
 CKEDITOR_IMAGE_BACKEND = "pillow"
+
 
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': None,
+        'toolbar': 'None',
     },
 }
 
 ###################################
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+
