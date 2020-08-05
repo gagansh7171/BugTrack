@@ -9,6 +9,7 @@
     display: flex;
     justify-content: space-between;
     padding-right: 5%;
+    padding-left: 1%;
 }
 
 .item2{
@@ -31,10 +32,11 @@
     font-family: 'Pacifico', cursive;
     align-items: center;
     justify-content: center;
-    padding: 2%;
+    padding: 1%;
     line-height: 2.6rem;
 }
 .item1-2{
+    font-family: 'Rosario', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -73,4 +75,8 @@
 #color2{
     background-color: black;
     color: white;
+}
+#color3{
+    background-color: #c9f5c1;
+    height: 12vh;
 }

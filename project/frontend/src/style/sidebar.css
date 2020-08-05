@@ -1,0 +1,27 @@
+.item{
+    width: min-content;
+}
+
+i.icon{
+    margin-right: 0px;
+}
+.side{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width:max-content;
+    height:88vh;
+    background-color: #1dba0f; 
+    /*done*/
+    /* background-color: #26ba18 */
+}
+.middle{
+    display: grid;
+    grid-template-columns: auto auto;
+    height: max-content;
+
+}
+.o{
+    background-color: blue;
+    padding : 1%;
+}

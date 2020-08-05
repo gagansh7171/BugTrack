@@ -1,14 +1,14 @@
-import React from 'react';
-import { Image, Responsive, Segment } from 'semantic-ui-react';
-import '../style/home.css';
-import logo from '../assets/logo.png';
-import bugtrack from '../assets/bug on trail.png';
+import React from 'react'
+import { Image, Responsive, Segment } from 'semantic-ui-react'
+import '../style/home.css'
+import logo from '../assets/logo.png'
+import bugtrack from '../assets/bug on trail.png'
 
 function Item1(){
     return(
         <div className='item1'>
             <div className='item1-1'>
-                <Image src= {logo} size='tiny'/>
+                <Image src= {logo} style={{width:'90px'}}/>
                 <span>&nbsp;&nbsp;</span> Bug Track
             </div>
             <div className ='item1-2'>
@@ -52,7 +52,7 @@ function Item3(){
     );
 }
 
-function Home (){
+function Home_page (){
         return(
             <div className = 'home'>
                 <Item1/>
@@ -61,9 +61,7 @@ function Home (){
             </div>
         );
 
-    
-
 }
 
 
-export default Home
+export default Home_page
