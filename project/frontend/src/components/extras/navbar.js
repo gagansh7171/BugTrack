@@ -4,7 +4,7 @@ import logo from '../../assets/logo.png'
 import axios from 'axios'
 import '../../style/home.css'
 import store from '../../store/store'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
 class Navbar extends Component{
 
@@ -38,6 +38,10 @@ class Navbar extends Component{
             }
         )
     }
+
+    goto = (e, go) => {
+        window.location='/mypage/'+go
+    }
     
     render(){
 
@@ -55,7 +59,7 @@ class Navbar extends Component{
                 
                 let adminview
                 if(this.props.user['admin']){
-                    adminview = <Dropdown.Item icon='spy' text='Admin'/>
+                    adminview = <Dropdown.Item icon='spy' onClick={(e) => this.goto(e,'admin')} text='Admin'/>
                     
                 }
 
@@ -68,6 +72,7 @@ class Navbar extends Component{
                         <div className ='item1-2'>
                             <Dropdown trigger={trigger}>
                                 <Dropdown.Menu>
+                                    <Dropdown.Item icon='home' text='My Page' onClick={(e) => this.goto(e,'home')}/>
                                     {adminview}
 
                                     <Dropdown.Item icon='log out' text='Logout' onClick={this.logout}/>
@@ -88,8 +93,8 @@ class Navbar extends Component{
         }
         else{
             return(
-                <Dimmer active>
-                    <Loader active size="massive" />
+                <Dimmer>
+                <Loader size='massive'></Loader>
                 </Dimmer>
             )
         }

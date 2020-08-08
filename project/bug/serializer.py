@@ -5,10 +5,12 @@ from .models import *
 
 class ProfileS(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Profile
-        fields = ['id','user', 'disabled', 'admin','enr', 'display_picture']
+        fields = ['id','user', 'disabled', 'admin','enr',  'display_picture']
         read_only_fields = ['enr']
+    
 
 
 class ProjectS(serializers.ModelSerializer):
@@ -18,6 +20,16 @@ class ProjectS(serializers.ModelSerializer):
         model = Projects
         fields = ['id','project_name', 'wiki', 'date', 'teams']
         read_only_fields = [ 'date']
+
+
+class BugSForDash(serializers.ModelSerializer):
+    creator = serializers.StringRelatedField(read_only=True)
+    project = serializers.StringRelatedField(read_only=True)
+    assigned_to = serializers.StringRelatedField()
+    class Meta:
+        model = Bug
+        fields = ['id','project', 'assigned_to', 'creator', 'head', 'status', 'tag', 'date']
+        read_only_fields = ['date', 'creator']
 
 
 class BugS(serializers.ModelSerializer):

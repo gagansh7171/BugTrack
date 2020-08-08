@@ -1,31 +1,42 @@
 import React from 'react'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
-
-import Home from './extras/mypagedetail'
+import {Icon} from 'semantic-ui-react'
+import MyPageDetail from './extras/mypagedetail'
 import Navbar from './extras/navbar'
-
+import Admin from './admin'
 class Mypage extends React.Component{
     constructor(props){
-
         super(props)
+        this.state={loading:true}
+        
+    }
+    componentDidMount(){
+        this.setState({loading:false})
     }
     render(){
-        return(
-            <div>
-                <Navbar />
-                
-                <Router>
-                    <Switch>
+        if (this.state.loading){
+            return null
+        }
+        else{
+            return(
+                <React.Fragment>
+                    <Navbar />
+                    
+                    <Router>
+                        <Switch>
 
-                        <Route exact path={"/mypage/home"} render={ () => <Home item='item1'/>} />
-                        <Route exact path={"/mypage/plus"} render={ () => <Home item='item2'/>} />
-                        <Route exact path={"/mypage/search"} render={ () => <Home item='item3'/>} />
-                        <Route exact path={"/mypage/users"} render={ () => <Home item='item4'/>} />
-                        <Route exact path={"/mypage/user"} render={ () => <Home item='item5'/>} />
-                    </Switch>
-                </Router>
-            </div>
-        )
+                            <Route exact path={"/mypage/home"} render={ () => <MyPageDetail item={0}/>} />
+                            <Route exact path={"/mypage/plus"} render={ () => <MyPageDetail item={1}/>} />
+                            <Route exact path={"/mypage/search"} render={ () => <MyPageDetail item={2}/>} />
+                            <Route exact path={"/mypage/users"} render={ () => <MyPageDetail item={3}/>} />
+                            <Route exact path={"/mypage/user"} render={ () => <MyPageDetail item={4}/>} />
+                            <Route exact path={"/mypage/admin"} render={ () => <Admin/>} />
+                        </Switch>
+                    </Router>
+                    <div className='footer item3'>Star this project at Github <a href='https://github.com'> <Icon name='github square' color='green' /></a> </div>
+                </React.Fragment>
+            )
+        }
     }
 }
 

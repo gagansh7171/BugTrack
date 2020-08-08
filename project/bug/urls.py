@@ -13,4 +13,5 @@ urlpatterns = [
     path('project/<int:pk>/team/', MembersOfProject.as_view()),
     path('project/<int:pk>/bugs/', BugsOfProject.as_view()),
     path('bugs/<int:pk>/comments/', CommentsOnBugs.as_view()),
+    path('front',index, name='index')
 ]

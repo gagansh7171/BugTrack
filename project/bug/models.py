@@ -28,7 +28,7 @@ class Bug(models.Model):
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='assigned')
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mybugs')
     description = RichTextUploadingField()
-    head = models.CharField(max_length=20)
+    head = models.CharField(max_length=40)
     status = models.IntegerField(default=2)
     #0 means solved
     #1 means assigned
@@ -45,7 +45,7 @@ class Bug(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.creator.username + ' ' + self.assigned_to.username
+        return str(self.id)
     
     class Meta:
         ordering = ['-status', '-date']

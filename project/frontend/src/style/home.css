@@ -78,5 +78,12 @@
 }
 #color3{
     background-color: #c9f5c1;
-    height: 12vh;
+
+}
+
+.footer{
+    padding: 1% 0%;
+    background-color:green;
+    color:white;
+    
 }
