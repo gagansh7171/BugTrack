@@ -20,6 +20,33 @@ class ProjectViewSet(viewsets.ModelViewSet):
         project.teams.add(self.request.user)
         project.save()
 
+    @action(methods=['GET'], detail=False, url_path='myteam', url_name='myteam')
+    def ProjectsOfUser(self, request):
+        if request.user.is_authenticated:
+            user = request.user
+            if user.is_active and (user.profile.disabled==False):
+                serializer = ProjectSforTeam(user.projects.all(), many=True)
+                a={}
+                i=0
+                for b in serializer.data:
+                    a[i] = dict(b)
+                    i=i+1
+                return JsonResponse(a)
+
+    @action(methods=['GET'], detail=False, url_path='search', url_name='search')
+    def ProjectSearch(self, request):
+        if request.user.is_authenticated:
+            user = request.user
+            if user.is_active and (user.profile.disabled==False):
+                b = Projects.objects.filter(project_name__icontains=request.GET.get('slug'))
+                serializer = ProjectS(b, many=True)
+                a={}
+                i=0
+                for b in serializer.data:
+                    a[i] = dict(b)
+                    i=i+1
+                return JsonResponse(a)
+
 
 class BugViewSet(viewsets.ModelViewSet):
     queryset = Bug.objects.all()
@@ -109,6 +136,23 @@ class ProfileViewSet(viewsets.ModelViewSet):
                 i=0
                 for b in serializer.data:
                     b['username'] = User.objects.get(id=b['user']).username
+                    b['email'] = User.objects.get(id=b['user']).email
+                    a[i] = dict(b)
+                    i=i+1
+                return JsonResponse(a)
+    
+    @action(methods=['GET'], detail=False, url_path='search', url_name='search')
+    def UserSearch(self, request):
+        if request.user.is_authenticated:
+            user = request.user
+            if user.is_active and (user.profile.disabled==False):
+                b = Profile.objects.filter(user__in=User.objects.filter(username__icontains=request.GET.get('slug')).values_list('id'))
+                serializer = ProfileS(b,context={"request": request},  many=True)
+                a={}
+                i=0
+                for b in serializer.data:
+                    b['username'] = User.objects.get(id=b['user']).username
+                    b['email'] = User.objects.get(id=b['user']).email
                     a[i] = dict(b)
                     i=i+1
                 return JsonResponse(a)
@@ -130,9 +174,17 @@ class MembersOfProject(APIView):
 
         a = User.objects.filter(projects=pk).values('profile__id')
         b = [ Profile.objects.get(id=i['profile__id']) for i in a]
-        c = ProfileS(b, many=True)
+        c = ProfileS(b,context={"request": request}, many=True)
 
-        return Response(c.data)
+        a={}
+        i=0
+        for b in c.data:
+            b['username'] = User.objects.get(id=b['user']).username
+            b['email'] = User.objects.get(id=b['user']).email
+            a[i] = dict(b)
+            i=i+1
+
+        return JsonResponse(a)
 
 class BugsOfProject(APIView):
 

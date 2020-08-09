@@ -1,8 +1,8 @@
 import React from 'react'
 import {Breadcrumb, Card, Ref, Icon} from 'semantic-ui-react'
 import axios from 'axios'
+
 import '../style/myproandbug.css'
-import { withRouter } from 'react-router-dom'
 
 var mod = require('../style/color')
 
@@ -16,10 +16,10 @@ function Cards(props){
     let date = new Date(props.date)
     let time = date.toTimeString().split(' ')
     return(
-        <div class='card_contain' style={{borderBottom: '4px solid '+mod.color[index]}}>
-            <div class='card1'>{props.project_name}</div>
-            <div class='card2'>{props.wiki}</div>
-            <div class='card3'>
+        <div className='card_contain' style={{borderBottom: '4px solid '+mod.color[index]}}>
+            <div className='card1'>{props.project_name}</div>
+            <div className='card2'>{props.wiki}</div>
+            <div className='card3'>
                 <div><Icon name='user' /> {props.teams.length} Members</div>
                 <div>
                     <i>{time[0]} {time[1]}<br/>
@@ -32,14 +32,14 @@ function Cards(props){
 /**************************************************************************************************** */
 function Status(props){
     return(<div style={{flex:'1'}}>
-        <div class='tagandstatus' style={{backgroundColor: mod.color[props.status]}}>{mod.status[props.status]}</div>
+        <div className='tagandstatus' style={{backgroundColor: mod.color[props.status]}}>{mod.status[props.status]}</div>
         </div>
     )
 }
 
 function Tag(props){
     return(<div style={{flex:'2'}}>
-        <div class='tagandstatus' style={{ backgroundColor: mod.color[12 - props.tag]}}>{mod.tag[props.tag]}</div>
+        <div className='tagandstatus' style={{ backgroundColor: mod.color[12 - props.tag]}}>{mod.tag[props.tag]}</div>
         </div>
     )
 }
@@ -51,21 +51,21 @@ function CardsForBug(props){
     let use
     if (props.comingfrom==0){
         use =
-            <div class='card2_bug'>
+            <div className='card2_bug'>
             <div>Project : {props.project} <br></br>Creator : {props.creator}</div> <div>{time[0]} {time[1]} {date.toDateString()}</div>
             </div>
     }
     else {
         use =
-            <div class='card2_bug'>
+            <div className='card2_bug'>
             <div>Project : {props.project}<br></br> Assigned To : {props.assigned_to}</div> <div>{time[0]} {time[1]} {date.toDateString()}</div>
             </div>
 
     }
     return(
-        <div class='card_contain_bug' style={{borderBottom: '4px solid '+mod.color[index]}}>
-            <div class='card1_bug'>
-                <div class='sub_card1_bug' style={{}}>{props.head}</div>
+        <div className='card_contain_bug' style={{borderBottom: '4px solid '+mod.color[index]}}>
+            <div className='card1_bug'>
+                <div className='sub_card1_bug'>{props.head}</div>
                 <Tag tag={props.tag} />
                 <Status status={props.status}/>
             </div>
@@ -175,27 +175,27 @@ class MyProAndBug extends React.Component{
 
         if(this.state.choice==ref1){
             display = this.state.data.map( (project) =>
-                <Cards {...project} />
+                <Cards key={project.id} {...project} />
             )
-            display = <div class='card_group'>{display}</div>
+            display = <div className='card_group'>{display}</div>
         }
 
         if(this.state.choice==ref2){
             let comingfrom = 0
             display = this.state.data.map( (bug) =>
-                <CardsForBug {...bug} comingfrom={comingfrom}/>
+                <CardsForBug key={bug.id} {...bug} comingfrom={comingfrom}/>
             )
             
-            display = <div class='card_group_bug'>{display}</div>
+            display = <div className='card_group_bug'>{display}</div>
         }
 
         if(this.state.choice==ref3){
             let comingfrom = 1
             display = this.state.data.map( (bug) =>
-                <CardsForBug {...bug} comingfrom={comingfrom}/>
+                <CardsForBug key={bug.id} {...bug} comingfrom={comingfrom}/>
             )
             
-            display = <div class='card_group_bug'>{display}</div>
+            display = <div className='card_group_bug'>{display}</div>
         }
 
         if(this.state.error){

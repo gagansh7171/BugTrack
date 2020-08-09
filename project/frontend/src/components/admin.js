@@ -43,18 +43,18 @@ class Admin extends React.Component{
         }
         if(this.state.res){
             let display = this.state.data.map( (user, index) =>
-            <div class='item'>
-                <div class='card_1'><div style={{flex:'1'}}>{user.username}</div> <div style={{flex:'1'}}><Image circular size='tiny' src={user.display_picture}/></div></div>
-                <div class='card_2'><Checkbox label={"Admin Status"} slider checked={user.admin} onChange={(e)=>{this.handleAdmin(e,user.id, index)}} /></div>
-                <div class ='card_3'><Checkbox label={"Disabled Status"} slider checked={user.disabled} onChange={(e)=>{this.handleDisabled(e,user.id, index)}} /></div>
+            <div key={user.id} className='item'>
+                <div className='card_1'><div className='subcard_1'>{user.username}<br/>{user.email}</div> <div style={{flex:'1'}}><Image circular size='tiny' src={user.display_picture}/></div></div>
+                <div className='card_2'><Checkbox label={"Admin Status"} slider checked={user.admin} onChange={(e)=>{this.handleAdmin(e,user.id, index)}} /></div>
+                <div className ='card_3'><Checkbox label={"Disabled Status"} slider checked={user.disabled} onChange={(e)=>{this.handleDisabled(e,user.id, index)}} /></div>
             </div>
         )
             return(
                 <React.Fragment>
                     
-                    <div class='admin1'>
+                    <div className='admin1'>
                         List of Users
-                        <div class='admin2'>
+                        <div className='admin2'>
                             {display}
                         </div>
                     </div>

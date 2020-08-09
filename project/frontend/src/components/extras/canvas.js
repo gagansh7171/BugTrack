@@ -2,7 +2,9 @@ import React from 'react'
 
 import MyProAndBug from '../myproandbug'
 import Search from '../Search'
-import '../../style/myproandbug.css'
+import Team from '../Team'
+import Profile from '../Profile'
+import '../../style/canvas.css'
 
 class Canvas extends React.Component{
     constructor(props){
@@ -20,10 +22,10 @@ class Canvas extends React.Component{
             return <div className='canvas'><Search/></div>
         }
         else if(this.props.item==3){
-            
+            return <div className='canvas'><Team/></div>
         }
         else if(this.props.item==4){
-            
+            return <div className='canvas'><Profile/></div>
         }
         return(<div className='canvas'>ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</div>)
     }

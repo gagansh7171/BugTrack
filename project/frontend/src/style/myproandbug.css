@@ -1,12 +1,4 @@
 
-.canvas{
-    height: 100%;
-    padding-left:2%;
-    padding-top: 10px;
-    overflow:auto;
-    padding-bottom: 1%;
-    padding-right: 1%;
-}
 .card_contain{
     padding: 2%;
     height: 250px;

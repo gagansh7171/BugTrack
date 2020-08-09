@@ -21,6 +21,11 @@ class ProjectS(serializers.ModelSerializer):
         fields = ['id','project_name', 'wiki', 'date', 'teams']
         read_only_fields = [ 'date']
 
+class ProjectSforTeam(serializers.ModelSerializer):
+    teams = serializers.PrimaryKeyRelatedField(queryset=User.objects.all() , many=True)
+    class Meta:
+        model = Projects
+        fields = ['id','project_name', 'teams']
 
 class BugSForDash(serializers.ModelSerializer):
     creator = serializers.StringRelatedField(read_only=True)
