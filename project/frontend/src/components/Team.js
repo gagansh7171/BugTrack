@@ -1,5 +1,5 @@
 import React from 'react'
-import {Icon, Image} from 'semantic-ui-react'
+import {Icon, Image, Dimmer, Loader} from 'semantic-ui-react'
 import axios from'axios'
 
 import '../style/admin.css'
@@ -37,11 +37,11 @@ function Project(props){
         </div>
     )
 }
-
+/**************************************************************************** */
 class Team extends React.Component{
     constructor(props){
         super(props)
-        this.state={data:[], empty:false}
+        this.state={data:[], empty:false, load:true}
     }
 
     fetchdata = async () => {
@@ -68,10 +68,10 @@ class Team extends React.Component{
                 b.push(a)
                 console.log(b)
             }
-            this.setState({data : b})
+            this.setState({data : b, load:false})
             
         }catch  (err) {
-            this.setState({empty:true})
+            this.setState({empty:true, load:false})
             return []
         }
         
@@ -90,7 +90,11 @@ class Team extends React.Component{
 
         }
         
-
+        if(this.state.load){
+            return (<Dimmer active='true'>
+            <Loader size='massive'/>
+            </Dimmer>)
+        }
         return(
             display
         )

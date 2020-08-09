@@ -93,7 +93,7 @@ class Navbar extends Component{
         }
         else{
             return(
-                <Dimmer>
+                <Dimmer active='true'>
                 <Loader size='massive'></Loader>
                 </Dimmer>
             )

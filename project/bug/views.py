@@ -98,6 +98,10 @@ class ProfileViewSet(viewsets.ModelViewSet):
                 username = user.username
                 b = serializer.data
                 b['username'] = username
+                b['email'] = user.email
+                b['fname'] = user.first_name
+                b['lname'] = user.last_name
+                b['date_joined'] = user.date_joined
                 return JsonResponse(b)  
             else:
                 return HttpResponseForbidden()
