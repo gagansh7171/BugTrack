@@ -73,6 +73,7 @@ class Search extends React.Component{
             }
         ).catch((error) => {
             this.setState({which:'error',load:false})
+        
         })
     }
 

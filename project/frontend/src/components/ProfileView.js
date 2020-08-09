@@ -17,7 +17,8 @@ class ProfileView extends React.Component{
         axios.get('profile/profile?'+querystring.stringify({'slug' : this.props.match.params.userId})).then( response =>{
             this.setState({user:response.data, state:false})
         }).catch( error =>{
-            window.location = '/mypage/home'
+            // window.location = '/mypage/home'
+            console.log(error)
             
         })
     }

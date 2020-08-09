@@ -92,17 +92,16 @@ class ProfileViewSet(viewsets.ModelViewSet):
     @action(methods=['GET'], detail=False, url_path='profile', url_name='profile')
     def ProfileOfUsers(self, request):
         if request.user.is_authenticated:
-            print(request.GET.get('slug'))
-            user = User.objects.get(id=int(request.GET.get('slug')))
-            if user.is_active and (user.profile.disabled==False):
-                serializer = ProfileS(user.profile, context={"request": request})
-                username = user.username
+            profile = Profile.objects.get(id=int(request.GET.get('slug')))
+            if profile.user.is_active and (profile.disabled==False):
+                serializer = ProfileS(profile, context={"request": request})
+                username = request.user.username
                 b = serializer.data
                 b['username'] = username
-                b['email'] = user.email
-                b['fname'] = user.first_name
-                b['lname'] = user.last_name
-                b['date_joined'] = user.date_joined
+                b['email'] = request.user.email
+                b['fname'] = request.user.first_name
+                b['lname'] = request.user.last_name
+                b['date_joined'] = request.user.date_joined
                 return JsonResponse(b)  
 
     @action(methods=['GET'], detail=False, url_path='user', url_name='user')
