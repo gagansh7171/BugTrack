@@ -93,7 +93,7 @@ class Navbar extends Component{
         }
         else{
             return(
-                <Dimmer active='true'>
+                <Dimmer active={true}>
                 <Loader size='massive'></Loader>
                 </Dimmer>
             )
@@ -104,10 +104,10 @@ class Navbar extends Component{
     
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(state) {
 
     return {
-      user: store.Reducer.user
+      user: state.Reducer.user
     };
 }
 

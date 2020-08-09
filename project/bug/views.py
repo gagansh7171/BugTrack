@@ -21,7 +21,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         project.save()
 
     @action(methods=['GET'], detail=False, url_path='myteam', url_name='myteam')
-    def ProjectsOfUser(self, request):
+    def MyTeams(self, request):
         if request.user.is_authenticated:
             user = request.user
             if user.is_active and (user.profile.disabled==False):
@@ -89,10 +89,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileS
     permission_classes = [isAdmin]
 
-    @action(methods=['GET'], detail=False, url_path='user', url_name='user')
-    def get_user(self, request):
+    @action(methods=['GET'], detail=False, url_path='profile', url_name='profile')
+    def ProfileOfUsers(self, request):
         if request.user.is_authenticated:
-            user = request.user
+            print(request.GET.get('slug'))
+            user = User.objects.get(id=int(request.GET.get('slug')))
             if user.is_active and (user.profile.disabled==False):
                 serializer = ProfileS(user.profile, context={"request": request})
                 username = user.username
@@ -102,6 +103,17 @@ class ProfileViewSet(viewsets.ModelViewSet):
                 b['fname'] = user.first_name
                 b['lname'] = user.last_name
                 b['date_joined'] = user.date_joined
+                return JsonResponse(b)  
+
+    @action(methods=['GET'], detail=False, url_path='user', url_name='user')
+    def get_user(self, request):
+        if request.user.is_authenticated:
+            user = request.user
+            if user.is_active and (user.profile.disabled==False):
+                serializer = ProfileS(user.profile, context={"request": request})
+                username = user.username
+                b = serializer.data
+                b['username'] = username
                 return JsonResponse(b)  
             else:
                 return HttpResponseForbidden()

@@ -1,4 +1,6 @@
 import React from 'react'
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import MyProAndBug from '../myproandbug'
 import Search from '../Search'
@@ -25,7 +27,7 @@ class Canvas extends React.Component{
             return <div className='canvas'><Team/></div>
         }
         else if(this.props.item==4){
-            return <div className='canvas'><Profile/></div>
+            return (<div className='canvas'><Profile/></div>)
         }
         return(<div className='canvas'>ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</div>)
     }

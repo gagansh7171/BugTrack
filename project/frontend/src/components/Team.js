@@ -1,5 +1,5 @@
 import React from 'react'
-import {Icon, Image, Dimmer, Loader} from 'semantic-ui-react'
+import {Icon, Image, Loader} from 'semantic-ui-react'
 import axios from'axios'
 
 import '../style/admin.css'
@@ -91,9 +91,8 @@ class Team extends React.Component{
         }
         
         if(this.state.load){
-            return (<Dimmer active='true'>
-            <Loader size='massive'/>
-            </Dimmer>)
+            return (
+            <Loader active='true' size='massive'/>)
         }
         return(
             display

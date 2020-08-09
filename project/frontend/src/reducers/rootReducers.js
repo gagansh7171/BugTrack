@@ -11,7 +11,6 @@ const Reducer = function(state = {user:[]}, action) {
         return state
 }
 
-
 const rootReducers = combineReducers({
     Reducer,
 

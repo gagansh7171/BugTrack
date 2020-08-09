@@ -5,18 +5,17 @@ import querystring from 'querystring'
 
 import '../style/profile.css'
 
-class Profile extends React.Component{
+
+class ProfileView extends React.Component{
     constructor(props){
         super(props)
         this.state={user:{}}
     }
     componentDidMount(){
 
-        axios.get('profile/user').then( user => {
 
-            axios.get('profile/profile?'+querystring.stringify({'slug' : user.data.id})).then( response =>{
-                this.setState({user:response.data, state:false})
-            })
+        axios.get('profile/profile?'+querystring.stringify({'slug' : this.props.match.params.userId})).then( response =>{
+            this.setState({user:response.data, state:false})
         }).catch( error =>{
             window.location = '/mypage/home'
             
@@ -25,7 +24,8 @@ class Profile extends React.Component{
     
     render(){
         let date = new Date(this.state.user.date_joined)
-        let profilecard = <div className='profilecard'>
+        let profilecard = <div style={{height:'80vh', display:'flex', justifyContent:'center'}}>
+            <div className='profilecard' >
             <Grid columns={2} divided stackable textAlign='center'>
                 <Grid.Row>
                     <Grid.Column>
@@ -45,7 +45,7 @@ class Profile extends React.Component{
                 </Grid.Row>
             </Grid>
         </div>
-
+        </div>
         return(
             profilecard
         
@@ -54,4 +54,4 @@ class Profile extends React.Component{
 }
 
 
-export default Profile
+export default ProfileView

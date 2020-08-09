@@ -1,14 +1,13 @@
 import React from 'react'
-import {Form, Icon, Image } from 'semantic-ui-react'
+import {Form, Icon, Image, Loader} from 'semantic-ui-react'
 import axios from'axios'
-import querystring from 'querystring'; /*For making post request easier*/
+import querystring from 'querystring' /*For making post request easier*/
 
 import '../style/admin.css'
 import '../style/myproandbug.css'
 
 
 function Cards(props){
-    let index = (props.id-1) % 13
     let date = new Date(props.date)
     let time = date.toTimeString().split(' ')
     return(
@@ -29,10 +28,11 @@ function Cards(props){
 class Search extends React.Component{
     constructor(props){
         super(props)
-        this.state = {project:'', user:'', which:''}
+        this.state = {project:'', user:'', which:'', load : false} 
     }
 
     ProjectChange = (e) => {
+        this.setState({load:true})
         let b = []
         axios.get('project/search?'+querystring.stringify({'slug' : e.target.value})).then(
             response => {
@@ -41,26 +41,21 @@ class Search extends React.Component{
                 }
                 
                 if(b.length==0){
-                    this.setState({which:'error'})
+                    this.setState({which:'error',load:false})
                 }
                 else{
-                    this.setState({project:b, which:'project'})
+                    this.setState({project:b, which:'project',load:false})
                 }
             }
         ).catch((error) => {
-            this.setState({which:'error'})
+            this.setState({which:'error',load:false})
         })
     }
-/*admin: true
-disabled: false
-display_picture: "/media/pic/default_profile_photo.jpeg"
-email: "gagansh7171@gmail.com"
-enr: 1
-id: 1
-user: 1
-username: "gagan"*/
-
+    gotouser = (e, id) =>{
+        window.location = '/mypage/user/'+id
+    }
     UserChange = (e) => {
+        this.setState({load:true})
         let b = []
         axios.get('profile/search?'+querystring.stringify({'slug' : e.target.value})).then( 
             response => {
@@ -70,14 +65,14 @@ username: "gagan"*/
                 }
                 
                 if(b.length==0){
-                    this.setState({which:'error'})
+                    this.setState({which:'error',load:false})
                 }
                 else{
-                    this.setState({user:b, which:'user'})
+                    this.setState({user:b, which:'user',load:false})
                 }
             }
         ).catch((error) => {
-            this.setState({which:'error'})
+            this.setState({which:'error',load:false})
         })
     }
 
@@ -90,11 +85,13 @@ username: "gagan"*/
         if(this.state.which=='user'){
             display = this.state.user.map( user => {
                 return (
-                    <div key={user.id} className='item'>
+                    
+                    <div key={user.id} onClick={(e) => this.gotouser(e, user.id)} className='item'>
                         <div className='card_1'><div className='subcard_1 '>{user.username}</div> <div style={{flex:'1'}}><Image circular size='tiny' src={user.display_picture}/></div></div>
                         <div className='card_2'>E-mail : {user.email}</div>
                         <div className ='card_3'>{ user.admin && <b>Admin</b>} {user.disabled && <b>Disabled</b>}</div>
                     </div>
+                    
                 )
             }) 
 
@@ -120,7 +117,7 @@ username: "gagan"*/
                     </Form.Group>
                 </Form>
                 
-                {display}
+                {this.state.load ? <Loader active='true' size='massive'/> : display}
    
             </React.Fragment>
         )
