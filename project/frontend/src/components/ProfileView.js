@@ -12,20 +12,17 @@ class ProfileView extends React.Component{
         this.state={user:{}}
     }
     componentDidMount(){
-
-
+        console.log(querystring.parse(this.props.location.search))
         axios.get('profile/profile?'+querystring.stringify({'slug' : this.props.match.params.userId})).then( response =>{
-            this.setState({user:response.data, state:false})
+            this.setState({user:response.data})
         }).catch( error =>{
-            // window.location = '/mypage/home'
-            console.log(error)
-            
+            window.location = '/mypage/home'
         })
     }
     
     render(){
         let date = new Date(this.state.user.date_joined)
-        let profilecard = <div style={{height:'80vh', display:'flex', justifyContent:'center'}}>
+        let profilecard = <div class='contain_profile'>
             <div className='profilecard' >
             <Grid columns={2} divided stackable textAlign='center'>
                 <Grid.Row>

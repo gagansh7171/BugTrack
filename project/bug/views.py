@@ -7,8 +7,12 @@ from .serializer import *
 from .permissions import *
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from django.http import JsonResponse, HttpResponseForbidden
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
 
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserS
+    permission_classes = [isSelf]
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Projects.objects.all()
@@ -19,6 +23,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
         project = serializer.save()
         project.teams.add(self.request.user)
         project.save()
+
+    # @action(methods=['POST'], detail=True, url_path='addnew', url_name='addnew')
+    # def AddMembertoTeamsActually(self, request, pk):
+    #     if request.user.is_authenticated:
+    #         user = request.user
+    #         if user.is_active and (user.profile.disabled==False):
+    #             Projects.objects.get(id=pk).teams.add(User.objects.get(id=request.POST.get('user')))
+    #             return HttpResponse('done')
 
     @action(methods=['GET'], detail=False, url_path='myteam', url_name='myteam')
     def MyTeams(self, request):
@@ -46,6 +58,20 @@ class ProjectViewSet(viewsets.ModelViewSet):
                     a[i] = dict(b)
                     i=i+1
                 return JsonResponse(a)
+    
+    @action(methods=['GET'], detail=True, url_path='addmem', url_name='addmem')
+    def ProjectNonMember(self, request, pk):
+        if request.user.is_authenticated:
+            user = request.user
+            if user.is_active and (user.profile.disabled==False):
+                a = User.objects.exclude(id__in = ProjectS(Projects.objects.get(id=pk)).data['teams'])
+                serializer = UserS(a, many=True)
+                b = {}
+                c = 0
+                for i in serializer.data:
+                    b[c] = dict(i)
+                    c=c+1
+                return JsonResponse(dict(b))
 
 
 class BugViewSet(viewsets.ModelViewSet):
@@ -113,6 +139,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
                 username = user.username
                 b = serializer.data
                 b['username'] = username
+                b['userid'] = user.id
                 return JsonResponse(b)  
             else:
                 return HttpResponseForbidden()
@@ -181,7 +208,6 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
-
 
 class MembersOfProject(APIView):
 

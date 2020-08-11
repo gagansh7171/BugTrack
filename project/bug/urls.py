@@ -4,6 +4,7 @@ from .views import *
 
 app_name = 'bug'
 router = DefaultRouter()
+router.register('user', UserViewSet, basename='user')
 router.register('project', ProjectViewSet, basename='projects')
 router.register('bugs', BugViewSet, basename='bugs')
 router.register('profile', ProfileViewSet, basename='profile')

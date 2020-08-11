@@ -8,10 +8,15 @@ class Members extends React.Component{
     constructor(props){
         super(props)
     }
+    
+    gotouser = (e, id) =>{
+        window.location = '/mypage/user/'+id
+    }
+
     render(){
         let display = this.props.mem.map( user => {
             return (
-                <div key={user.id} className='item'>
+                <div key={user.id} onClick={(e) => this.gotouser(e, user.id)} className='item'>
                     <div className='card_1'><div className='subcard_1 '>{user.username}</div> <div style={{flex:'1'}}><Image circular size='tiny' src={user.display_picture}/></div></div>
                     <div className='card_2'>E-mail : {user.email}</div>
                     <div className ='card_3'>{ user.admin && <b>Admin</b>} {user.disabled && <b>Disabled</b>}</div>

@@ -10,13 +10,16 @@ var ref1 = React.createRef()
 var ref2 = React.createRef()
 var ref3 = React.createRef()
 
+function gotoproject(e, id){
+    window.location = '/mypage/project/'+id
+}
 
 function Cards(props){
     let index = (props.id-1) % 13
     let date = new Date(props.date)
     let time = date.toTimeString().split(' ')
     return(
-        <div className='card_contain' style={{borderBottom: '4px solid '+mod.color[index]}}>
+        <div className='card_contain' onClick={(e) => gotoproject(e, props.id)} style={{borderBottom: '4px solid '+mod.color[index]}}>
             <div className='card1'>{props.project_name}</div>
             <div className='card2'>{props.wiki}</div>
             <div className='card3'>
@@ -52,13 +55,13 @@ function CardsForBug(props){
     if (props.comingfrom==0){
         use =
             <div className='card2_bug'>
-            <div>Project : {props.project} <br></br>Creator : {props.creator}</div> <div>{time[0]} {time[1]} {date.toDateString()}</div>
+            <div>Project : {props.project} <br></br>Creator : {props.creator}</div> <div>{time[0]} {date.toDateString()}</div>
             </div>
     }
     else {
         use =
             <div className='card2_bug'>
-            <div>Project : {props.project}<br></br> Assigned To : {props.assigned_to}</div> <div>{time[0]} {time[1]} {date.toDateString()}</div>
+            <div>Project : {props.project}<br></br> Assigned To : {props.assigned_to}</div> <div>{time[0]} {date.toDateString()}</div>
             </div>
 
     }

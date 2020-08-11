@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'channels',
     'corsheaders',
+    'oauth2_provider',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -68,9 +69,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-    #  'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-    # )
+     'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'rest_framework.authentication.BasicAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
 }
 
 TEMPLATES = [

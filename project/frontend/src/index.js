@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import store from './store/store'
 
 import Home_page from './components/home_page'
-import Mypage from './components/mypage';
+import Mypage from './components/mypage'
 
 
 axios.defaults.baseURL = 'http://localhost:8000/'

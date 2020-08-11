@@ -23,6 +23,10 @@ class Admin extends React.Component{
         )
     }
 
+    gotouser = (e, id) =>{
+        window.location = '/mypage/user/'+id
+    }
+
     handleAdmin = (e, id, index) => {
         let list = this.state.data
         list[index]['admin'] = !list[index]['admin']
@@ -43,8 +47,8 @@ class Admin extends React.Component{
         }
         if(this.state.res){
             let display = this.state.data.map( (user, index) =>
-            <div key={user.id} className='item'>
-                <div className='card_1'><div className='subcard_1'>{user.username}<br/>{user.email}</div> <div style={{flex:'1'}}><Image circular size='tiny' src={user.display_picture}/></div></div>
+            <div key={user.id}  className='item'>
+                <div className='card_1' onClick={(e) => this.gotouser(e, user.id)}><div className='subcard_1'>{user.username}<br/>{user.email}</div> <div style={{flex:'1'}}><Image circular size='tiny' src={user.display_picture}/></div></div>
                 <div className='card_2'><Checkbox label={"Admin Status"} slider checked={user.admin} onChange={(e)=>{this.handleAdmin(e,user.id, index)}} /></div>
                 <div className ='card_3'><Checkbox label={"Disabled Status"} slider checked={user.disabled} onChange={(e)=>{this.handleDisabled(e,user.id, index)}} /></div>
             </div>

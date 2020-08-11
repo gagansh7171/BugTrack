@@ -1,6 +1,12 @@
 from rest_framework import permissions
 from .models import *
 
+class isSelf(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        userid = view.kwargs.get('pk')
+        return int(request.user.id) == int(userid)
+
 class isAdmin(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):

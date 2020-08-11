@@ -6,12 +6,15 @@ import querystring from 'querystring' /*For making post request easier*/
 import '../style/admin.css'
 import '../style/myproandbug.css'
 
+function gotoproject(e, id){
+    window.location = '/mypage/project/'+id
+}
 
 function Cards(props){
     let date = new Date(props.date)
     let time = date.toTimeString().split(' ')
     return(
-        <div className='card_contain' >
+        <div className='card_contain' onClick={(e) => gotoproject(e, props.id)}  >
             <div className='card1'>{props.project_name}</div>
             <div className='card2'>{props.wiki}</div>
             <div className='card3'>
@@ -51,9 +54,11 @@ class Search extends React.Component{
             this.setState({which:'error',load:false})
         })
     }
+
     gotouser = (e, id) =>{
         window.location = '/mypage/user/'+id
     }
+
     UserChange = (e) => {
         this.setState({load:true})
         let b = []
@@ -81,7 +86,7 @@ class Search extends React.Component{
 
         let display
         if(this.state.which=='error'){
-            display = <div className='errorForSearch'><Icon name='question' flipped='horizontally' size='big'/> NO DATA <Icon name='question' size='big' /></div>
+            display = <div className='errorForSearch'><Icon name='question' flipped='horizontally' size='big'/> NO MATCH <Icon name='question' size='big' /></div>
         }
         if(this.state.which=='user'){
             display = this.state.user.map( user => {

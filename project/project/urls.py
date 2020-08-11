@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('bug.urls', namespace='bug')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    # path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

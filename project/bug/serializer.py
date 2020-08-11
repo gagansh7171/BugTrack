@@ -11,7 +11,11 @@ class ProfileS(serializers.ModelSerializer):
         fields = ['id','user', 'disabled', 'admin','enr',  'display_picture']
         read_only_fields = ['enr']
     
+class UserS(serializers.ModelSerializer):
 
+    class Meta:
+        model = User
+        fields = ['id', 'username']
 
 class ProjectS(serializers.ModelSerializer):
 

@@ -2,7 +2,7 @@
     padding :30px;
     border-radius: 15px;
     border: 1px solid rgb(200,200,200);
-    width:50%;
+    width: max(50%, 300px);
     margin-top: 7%;
     height: max-content;
 }
@@ -12,4 +12,12 @@
 .data-profile{
     font-size: large;
     line-height: 2em;
+    overflow-wrap: break-word;
+    overflow: auto;
+}
+.contain_profile{
+    height: fit-content;
+    min-height:80vh;
+    display:flex;
+    justify-content:center
 }
