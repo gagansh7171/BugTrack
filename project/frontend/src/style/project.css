@@ -37,6 +37,9 @@
 
 .members-project{
     margin-bottom: 10px;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 .card_group_bug{
     width:100%;

@@ -25,11 +25,13 @@ class UserS(serializers.ModelSerializer):
 
 class ProjectS(serializers.ModelSerializer):
 
-    teams = serializers.PrimaryKeyRelatedField(queryset=User.objects.all() , many=True)
+    teams = serializers.PrimaryKeyRelatedField(queryset=User.objects.all() , many=True, read_only=False)
     class Meta:
         model = Projects
         fields = ['id','project_name', 'wiki', 'date', 'teams']
         read_only_fields = [ 'date']
+
+
 
 class ProjectSforTeam(serializers.ModelSerializer):
     teams = serializers.PrimaryKeyRelatedField(queryset=User.objects.all() , many=True)

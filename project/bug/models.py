@@ -15,7 +15,7 @@ class Profile(models.Model):
         return self.user.username
 
 class Projects(models.Model):
-    project_name = models.CharField(max_length=20, unique=True)
+    project_name = models.CharField(max_length=37, unique=True)
     wiki = RichTextUploadingField()
     date = models.DateTimeField(auto_now_add=True)
     teams = models.ManyToManyField(User, related_name='projects')

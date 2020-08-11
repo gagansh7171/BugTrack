@@ -24,7 +24,7 @@ class PhotoViewSet(viewsets.ModelViewSet):
     serializer_class = ProfilePhotoS
     permission_classes = [isSelfPhoto]
 
-    
+
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Projects.objects.all()
     serializer_class = ProjectS
@@ -35,13 +35,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
         project.teams.add(self.request.user)
         project.save()
 
-    # @action(methods=['POST'], detail=True, url_path='addnew', url_name='addnew')
-    # def AddMembertoTeamsActually(self, request, pk):
-    #     if request.user.is_authenticated:
-    #         user = request.user
-    #         if user.is_active and (user.profile.disabled==False):
-    #             Projects.objects.get(id=pk).teams.add(User.objects.get(id=request.POST.get('user')))
-    #             return HttpResponse('done')
+    @action(methods=['GET'], detail=True, url_path='ismember', url_name='ismember')
+    def IsMember(self, request, pk):
+        if request.user.is_authenticated and request.user.is_active and (request.user.profile.disabled==False) and (request.user in Projects.objects.get(id=pk).teams.all() or request.user.profile.admin) :
+            return JsonResponse({'member' : True})
+        else :
+            return JsonResponse({'member' : False})
 
     @action(methods=['GET'], detail=False, url_path='myteam', url_name='myteam')
     def MyTeams(self, request):
@@ -83,6 +82,23 @@ class ProjectViewSet(viewsets.ModelViewSet):
                     b[c] = dict(i)
                     c=c+1
                 return JsonResponse(dict(b))
+    
+    @action(methods=['PATCH'], detail=True, url_path='addmember', url_name='addmember')
+    def ProjectMemberAdd(self, request, pk):
+        if request.user.is_authenticated:
+            user = request.user
+            if user.is_active and (user.profile.disabled==False) and (user in Projects.objects.get(id=pk).teams.all()):
+                Projects.objects.get(id=pk).teams.add(User.objects.get(id=request.data['teams']))
+                return HttpResponse('added')
+    
+    @action(methods=['PATCH'], detail=True, url_path='deletemem', url_name='deletemem')
+    def ProjectMemberDelete(self, request, pk):
+        if request.user.is_authenticated:
+            user = request.user
+            if user.is_active and (user.profile.disabled==False) and (user in Projects.objects.get(id=pk).teams.all()):
+                Projects.objects.get(id=pk).teams.remove(User.objects.get(id=request.data['teams']))
+                # print(dict(request.data))
+                return HttpResponse('removed')
 
 
 class BugViewSet(viewsets.ModelViewSet):
