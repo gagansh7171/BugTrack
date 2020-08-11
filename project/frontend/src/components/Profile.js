@@ -4,6 +4,7 @@ import axios from 'axios'
 import querystring from 'querystring'
 
 import '../style/profile.css'
+var ref1 = React.createRef()
 
 class Messageonsent extends React.Component{
     constructor(props){
@@ -11,7 +12,7 @@ class Messageonsent extends React.Component{
     }
     render() {
         return(<>
-            {this.props.msg ? <Message success header='Username Updated' content='Please Reload'/> : <Message error header='Username Update Failed' content='Invalid Input'/>}
+            {this.props.msg ? <Message success header='Update Successful' content='Please Reload'/> : <Message error header='Update Failed' content='Invalid Input'/>}
             </>
             )
     }
@@ -40,13 +41,30 @@ class Profile extends React.Component{
         this.setState({value: e.target.value})
     }
     
+    fileChange = (e)=>{
+        var formData = new FormData();
+
+        const config = {
+            headers:{
+                'content-type': 'multipart/form-data'
+            }
+        }
+        formData.append('display_picture', e.target.files[0])
+        
+        axios.patch('photo/'+this.state.user.id+'/', formData, config ).then(res => {
+            this.setState({value:'', msg:true, show : true})
+        }).catch( error => {
+            this.setState({value:'', msg:false, show:true})
+        })
+    
+    }
+
     handleSubmit = (e) => {
         
         axios.patch('user/'+this.state.userid+'/', {username : this.state.value}).then(res => {
             this.setState({value:'', msg:true, show : true})
         }).catch( error => {
             this.setState({value:'', msg:false, show:true})
-        
         })
     }
 
@@ -76,9 +94,12 @@ class Profile extends React.Component{
         <Form>
         <Form.Group style={{marginTop : '20px'}} widths='4'>
             
-            <Form.Input fluid placeholder='Change Username' value={this.state.value} onChange={this.handleChange} /><span>&nbsp;&nbsp;</span><Button color='blue' onClick={this.handleSubmit}>Patch</Button>
+            <Form.Input fluid placeholder='Change Username' value={this.state.value} onChange={this.handleChange} /><span>&nbsp;&nbsp;</span><Button color='blue' onClick={this.handleSubmit}>Change</Button>
+                   
         </Form.Group>
         </Form>
+        <Button color='blue' content="Change Profile Photo" labelPosition="left" icon="file" onClick={() => ref1.current.click()}/>
+        <input ref={ref1} type='file'  hidden onChange={(e) => this.fileChange(e)}/> 
         { this.state.show && <Messageonsent msg = {this.state.msg}/>}
     </>
 

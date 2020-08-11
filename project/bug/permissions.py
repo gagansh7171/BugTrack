@@ -7,6 +7,13 @@ class isSelf(permissions.BasePermission):
         userid = view.kwargs.get('pk')
         return int(request.user.id) == int(userid)
 
+
+class isSelfPhoto(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        profileid = view.kwargs.get('pk')
+        return int(request.user.profile.id) == int(profileid)
+
 class isAdmin(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):

@@ -4,7 +4,9 @@
     display:grid;
     grid-template-rows: 0.17fr 0.7fr 0.17fr;
 }
-
+a{
+    color:black;
+}
 .item1{
     display: flex;
     justify-content: space-between;

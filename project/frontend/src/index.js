@@ -8,7 +8,7 @@ import store from './store/store'
 
 import Home_page from './components/home_page'
 import Mypage from './components/mypage'
-
+import Loggit from './components/loggit'
 
 axios.defaults.baseURL = 'http://localhost:8000/'
 axios.defaults.xsrfCookieName = 'csrftoken'
@@ -24,6 +24,7 @@ ReactDOM.render(
               {/* <Route exact path={"/login"} component={Login} /> */}
               <Route exact path={"/"} component={Home_page} />
               <Route path={"/mypage"} component={Mypage} />
+              <Route path={"/loggit"} component={Loggit} />
           </Switch>
     </Router>
   </Provider>

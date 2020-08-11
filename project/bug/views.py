@@ -7,13 +7,24 @@ from .serializer import *
 from .permissions import *
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse, HttpResponseBadRequest
+import json
+import requests
+import string 
+import random 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserS
     permission_classes = [isSelf]
 
+
+class PhotoViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfilePhotoS
+    permission_classes = [isSelfPhoto]
+
+    
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Projects.objects.all()
     serializer_class = ProjectS
@@ -115,6 +126,87 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileS
     permission_classes = [isAdmin]
 
+    @action(methods=['POST', 'OPTIONS'], detail=False, url_path='token', url_name='token')
+    def TokenParser(self, request):
+        
+        try:
+            token = json.loads(request.body.decode('utf-8'))
+            auth = token['code']
+        except:
+            return HttpResponseBadRequest()
+        
+        data = {
+            'client_id': 'InkEzNrdetKn6grsh3bEzumxUXKwVXgwxZxg2BDo',
+            'client_secret': 'tF0joMwszxHRuNPZSQAzo1wzHA5qhFVPWStg959ZcrY4HJg4gDOKXvcAUjSn4jSY56aZ8LVF09EK3ps5KOqZMRH9TNhX4bKs2le2D4NTkmRR83RKmkcsRYGoGhONUl1d',
+            'grant_type': 'authorization_code',
+            'redirect_url': 'http://localhost:3000/loggit/',
+            'code': auth
+        }
+
+        response = requests.post('https://internet.channeli.in/open_auth/token/', data=data)
+        response = json.loads(response.text)
+        access_token = response['access_token']
+        #     print('******************************************second request received')
+        response2 = requests.get(
+            url="https://internet.channeli.in/open_auth/get_user_data/",
+            headers={'Authorization': f'Bearer {access_token}'}
+        )
+        response2 = json.loads(response2.text)
+        try:
+            roles = response2['person']['roles']
+            user = Profile.objects.get(enr=response2['student']['enrolmentNumber']).user
+            login(request=request, user=user)
+            # print('***************************************************exists')
+            return HttpResponse('exists')
+        except Profile.DoesNotExist:
+            #create user
+            maintainer = False
+            for i in roles:
+                if i['role'] == 'Maintainer':
+                    maintainer = True
+                    break
+
+            if maintainer:
+                is_admin = False
+                if response2["student"]["currentYear"] >= 4:
+                    is_admin = True
+                disabled = False
+                enr = response2["student"]["enrolmentNumber"]
+                email = response2["contactInformation"]["instituteWebmailAddress"]
+                name = (response2["person"]["fullName"]).split()
+                
+                 
+                first_name = name[0]
+                last_name = name[1]
+                username = str(''.join(random.choices(string.ascii_uppercase + string.digits, k = 15)))
+
+                user = User.objects.create(
+                    is_superuser=False,
+                    username=username,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    is_staff = True,
+                    is_active = True)
+                try :
+                    profile = Profile.objects.create(
+                        user=user,
+                        disabled= False,
+                        admin=is_admin,
+                        enr=enr,
+                        display_picture=response2["person"]["display_picture"]
+                    )
+                except:
+                    profile = Profile.objects.create(
+                        user=user,
+                        disabled= False,
+                        admin=is_admin,
+                        enr=enr,)
+                login(request=request, user=user)
+                return HttpResponse('created')
+            else : 
+                return JsonResponse({"status": "user not in IMG"}, status=status.HTTP_401_UNAUTHORIZED)
+
     @action(methods=['GET'], detail=False, url_path='profile', url_name='profile')
     def ProfileOfUsers(self, request):
         if request.user.is_authenticated:
@@ -198,7 +290,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
                     a[i] = dict(b)
                     i=i+1
                 return JsonResponse(a)
-
 
 
 class CommentViewSet(viewsets.ModelViewSet):

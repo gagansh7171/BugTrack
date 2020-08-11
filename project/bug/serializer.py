@@ -3,6 +3,12 @@ from .models import *
 
 
 
+class ProfilePhotoS(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ['id','display_picture']
+
 class ProfileS(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
 
@@ -10,7 +16,7 @@ class ProfileS(serializers.ModelSerializer):
         model = Profile
         fields = ['id','user', 'disabled', 'admin','enr',  'display_picture']
         read_only_fields = ['enr']
-    
+
 class UserS(serializers.ModelSerializer):
 
     class Meta:
