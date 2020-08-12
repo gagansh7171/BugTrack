@@ -33,6 +33,18 @@ class teamMember(permissions.BasePermission):
     
             return obj in a
 
+class bugteam(permissions.BasePermission):
+
+    def has_object_permission(self,request,view,obj):
+
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        else:
+
+            a = request.user.projects.all()
+    
+            return obj.project in a
+
 class creator(permissions.BasePermission):
 
     def has_object_permission(self,request,view,obj):

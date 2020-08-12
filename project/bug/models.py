@@ -25,7 +25,7 @@ class Projects(models.Model):
 
 class Bug(models.Model):
     project = models.ForeignKey(Projects, on_delete=models.CASCADE, related_name='bugs')
-    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='assigned')
+    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,blank=True, related_name='assigned')
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mybugs')
     description = RichTextUploadingField()
     head = models.CharField(max_length=36)

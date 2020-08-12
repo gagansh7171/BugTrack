@@ -6,6 +6,7 @@ import Navbar from './extras/navbar'
 import Admin from './admin'
 import ProfileView from './ProfileView'
 import ProjectView from './ProjectView'
+// import BugView from './BugView'
 
 class Mypage extends React.Component{
     constructor(props){
@@ -27,6 +28,7 @@ class Mypage extends React.Component{
                     
                     <Router>
                         <Switch>
+                            {/* <Route exact path={"/mypage/project/:projectId/bug/:bugId"} render={ (props) => <BugView {...props}/>} /> */}
                             <Route exact path={"/mypage/project/:projectId"} render={ (props) => <ProjectView {...props}/>} />
                             <Route exact path={"/mypage/home"} render={ () => <MyPageDetail item={0}/>} />
                             <Route exact path={"/mypage/plus"} render={ () => <MyPageDetail item={1}/>} />

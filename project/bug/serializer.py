@@ -51,17 +51,17 @@ class BugSForDash(serializers.ModelSerializer):
 
 class BugS(serializers.ModelSerializer):
     creator = serializers.PrimaryKeyRelatedField(read_only=True)
-    project = serializers.PrimaryKeyRelatedField(read_only=True)
-    assigned_to = serializers.PrimaryKeyRelatedField(queryset=User.objects.all() )
+    project = serializers.PrimaryKeyRelatedField(queryset=Projects.objects.all(),required=True)
+    assigned_to = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),required=False )
     class Meta:
         model = Bug
         fields = ['id','project', 'assigned_to', 'creator', 'description', 'head', 'status', 'tag', 'date']
-        read_only_fields = ['date', 'creator']
+        read_only_fields = ['date', 'creator', 'project']
 
 
 class CommentsS(serializers.ModelSerializer):
     creator = serializers.PrimaryKeyRelatedField(read_only=True)
-    bug = serializers.PrimaryKeyRelatedField(read_only=True)
+    bug = serializers.PrimaryKeyRelatedField(queryset=Bug.objects.all(),)
     class Meta:
         model = Comments
         fields = ['id','creator', 'date', 'description', 'bug']

@@ -12,6 +12,7 @@ import json
 import requests
 import string 
 import random 
+from .mailbot import *
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -87,27 +88,53 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def ProjectMemberAdd(self, request, pk):
         if request.user.is_authenticated:
             user = request.user
-            if user.is_active and (user.profile.disabled==False) and (user in Projects.objects.get(id=pk).teams.all()):
-                Projects.objects.get(id=pk).teams.add(User.objects.get(id=request.data['teams']))
+            curr_project = Projects.objects.get(id=pk)
+            if user.is_active and (user.profile.disabled==False) and (user in curr_project.teams.all()):
+                new_member = User.objects.get(id=request.data['teams'])
+                curr_project.teams.add(new_member)
+                context = {
+                    "action": "add_member",
+                    "project": curr_project,
+                }
+                MailBot([new_member], context).start()
+
                 return HttpResponse('added')
+        
+
     
     @action(methods=['PATCH'], detail=True, url_path='deletemem', url_name='deletemem')
     def ProjectMemberDelete(self, request, pk):
         if request.user.is_authenticated:
             user = request.user
-            if user.is_active and (user.profile.disabled==False) and (user in Projects.objects.get(id=pk).teams.all()):
-                Projects.objects.get(id=pk).teams.remove(User.objects.get(id=request.data['teams']))
-                # print(dict(request.data))
+            curr_project = Projects.objects.get(id=pk)
+            if user.is_active and (user.profile.disabled==False) and (user in curr_project.teams.all()):
+                del_member = User.objects.get(id=request.data['teams'])
+                curr_project.teams.remove(del_member)
+                context = {
+                    "action": "del_member",
+                    "project": curr_project,
+                }
+                MailBot([del_member], context).start()
+
                 return HttpResponse('removed')
 
 
 class BugViewSet(viewsets.ModelViewSet):
     queryset = Bug.objects.all()
     serializer_class = BugS
-    permission_classes = [isAdmin|creator]
+    permission_classes = [isAdmin|creator|bugteam]
 
     def perform_create(self, serializer):
-        serializer.save(creator=self.request.user)
+        a = serializer.save(creator=self.request.user)
+        project = serializer.validated_data['project']
+        users = project.teams.all()
+        context = {
+                    "action": "new_bug",
+                    "project": project,
+                    'bug' : a
+        }
+
+        MailBot( list(users), context).start()
     
     @action(methods=['GET'], detail=False, url_path='assigned', url_name='assigned')
     def assignedBugs(self, request):
@@ -219,6 +246,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
                         admin=is_admin,
                         enr=enr,)
                 login(request=request, user=user)
+
+                context = {
+                    "action": "new_user",
+                    "User": user,
+                }
+                MailBot([user], context).start()
+
                 return HttpResponse('created')
             else : 
                 return JsonResponse({"status": "user not in IMG"}, status=status.HTTP_401_UNAUTHORIZED)
