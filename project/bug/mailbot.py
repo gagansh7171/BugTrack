@@ -72,7 +72,7 @@ def send_for_purpose(user_list, context):
             <html>
                 <body style='text-align:center;'>
                     <h1 style='color:#2d4dad;'>Bug Track</h1><hr />
-                    <p>A new Bug has been reported in the project <b>{context['project'].project_name}</b> titled <b>{context['bug'].head}</b>. Check it < a href="{base}mypage/project/{context['project'].id}/bug/{context['bug'].id}">out</a>
+                    <p>A new Bug has been reported in the project <b>{context['project'].project_name}</b> titled <b>{context['bug'].head}</b>. Check it <a href="{base}mypage/project/{context['project'].id}/bug/{context['bug'].id}/">out</a>
                     </p><hr />
                 </body>
             </html>
