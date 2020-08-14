@@ -92,6 +92,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
             if user.is_active and (user.profile.disabled==False) and (user in curr_project.teams.all()):
                 new_member = User.objects.get(id=request.data['teams'])
                 curr_project.teams.add(new_member)
+                curr_project.save()
                 context = {
                     "action": "add_member",
                     "project": curr_project,
@@ -110,6 +111,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
             if user.is_active and (user.profile.disabled==False) and (user in curr_project.teams.all()):
                 del_member = User.objects.get(id=request.data['teams'])
                 curr_project.teams.remove(del_member)
+                curr_project.save()
                 context = {
                     "action": "del_member",
                     "project": curr_project,
@@ -121,8 +123,13 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class BugViewSet(viewsets.ModelViewSet):
     queryset = Bug.objects.all()
-    serializer_class = BugS
-    permission_classes = [isAdmin|creator|bugteam]
+    permission_classes = [isAdmin|bugteam]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return BugS
+        else:
+            return BugSForDash
 
     def perform_create(self, serializer):
         a = serializer.save(creator=self.request.user)
@@ -133,9 +140,18 @@ class BugViewSet(viewsets.ModelViewSet):
                     "project": project,
                     'bug' : a
         }
-
-        MailBot( list(users), context).start()
+        MailBot( list(users), context).start()      
     
+    @action(methods=['GET'], detail=True, url_path='team', url_name='team')
+    def isMember(self, request, pk):
+        if request.user.is_authenticated:
+            user = request.user
+            if user.is_active and (user.profile.disabled==False):
+                if user in Bug.objects.get(id=pk).project.teams.all():
+                    return JsonResponse({'member' : True})
+                else:
+                    return JsonResponse({'member' : False})
+
     @action(methods=['GET'], detail=False, url_path='assigned', url_name='assigned')
     def assignedBugs(self, request):
         if request.user.is_authenticated:
@@ -161,6 +177,66 @@ class BugViewSet(viewsets.ModelViewSet):
                     a[i] = dict(b)
                     i=i+1
                 return JsonResponse(a)
+    
+    @action(methods=['GET'], detail=True, url_path='teammem', url_name='teammem')
+    def TeamMem(self, request,pk):
+        if request.user.is_authenticated:
+            user = request.user
+            if user.is_active and (user.profile.disabled==False):
+                serializer = UserS( Bug.objects.get(id=pk).project.teams.all(),many=True)
+                return Response(serializer.data)
+    
+    @action(methods=['PUT'], detail=True, url_path='assign_to', url_name='assign_to')
+    def AssignBugs(self, request, pk):
+        if request.user.is_authenticated:
+            user = request.user
+            assignto = User.objects.get(id = request.data['assigned_to'])
+            bug = Bug.objects.get(id=pk)
+
+            if user.is_active and (user.profile.disabled==False):
+
+                bug.assigned_to = assignto
+                bug.status = 1
+                bug.save()
+                context = {
+                    "action": "bug_assignment",
+                    "bug": bug,
+                    "project": bug.project,
+                }
+                MailBot([assignto], context).start()
+
+                return HttpResponse('assigned')
+    
+    @action(methods=['PUT'], detail=True, url_path='tag', url_name='tag')
+    def Tagchange(self, request, pk):
+        if request.user.is_authenticated:
+            user = request.user
+            tag = request.data['tag']
+            bug = Bug.objects.get(id=pk)
+
+            if user.is_active and (user.profile.disabled==False):
+
+                bug.tag = tag
+                bug.save()
+                return HttpResponse('tagchange')
+
+    @action(methods=['PUT'], detail=True, url_path='status', url_name='status')
+    def StatusUpdate(self, request, pk):
+        if request.user.is_authenticated:
+            user = request.user
+            bug = Bug.objects.get(id=pk)
+            if user.is_active and (user.profile.disabled==False):
+                bug.status = 0
+                bug.save()
+                print(bug.status)
+                context = {
+                    "action": "bug_resolved",
+                    "bug": bug,
+                    "project": bug.project,
+                }
+                MailBot(bug.project.teams.all(), context).start()
+
+                return HttpResponse('resolved')
 
 
 
@@ -245,6 +321,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
                         disabled= False,
                         admin=is_admin,
                         enr=enr,)
+                profile.save()
+                user.save()
                 login(request=request, user=user)
 
                 context = {
@@ -366,18 +444,18 @@ class MembersOfProject(APIView):
             a[i] = dict(b)
             i=i+1
 
-        return JsonResponse(a)
+        return Response(a)
 
 class BugsOfProject(APIView):
 
     def get(self, request, pk):
-        serializer = BugS(Projects.objects.get(pk=pk).bugs.all(), many=True)
+        serializer = BugSForDash(Projects.objects.get(pk=pk).bugs.all(), many=True)
         return Response(serializer.data)
 
 class CommentsOnBugs(APIView):
 
     def get(self, request, pk):
-        serializer = CommentsS(Bug.objects.get(pk=pk).comments.all(), many=True)
+        serializer = CommentsSS(Bug.objects.get(pk=pk).comments.all(), many=True, context={"request": request})
         return Response(serializer.data)
 
 

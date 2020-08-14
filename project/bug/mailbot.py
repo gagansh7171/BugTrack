@@ -72,12 +72,37 @@ def send_for_purpose(user_list, context):
             <html>
                 <body style='text-align:center;'>
                     <h1 style='color:#2d4dad;'>Bug Track</h1><hr />
-                    <p>A new Bug has been reported in the project <b>{context['project'].project_name}</b> titled <b>{context['bug'].head}</b>. Check it <a href="{base}mypage/project/{context['project'].id}/bug/{context['bug'].id}/">out</a>
+                    <p>A new Bug has been reported in the project <b>{context['project'].project_name}</b> titled <b>{context['bug'].head}</b>. Check it <a href="{base}mypage/bug/{context['bug'].id}/">out</a>
                     </p><hr />
                 </body>
             </html>
         """
 
+    elif context["action"] == "bug_resolved":
+        subject = "A Bug has been resolved! ✌️"
+        text = f"""A bug has been resolved in {context['project'].project_name}"""
+        html = f"""\
+            <html>
+                <body style='text-align:center;'>
+                    <h1 style='color:#2d4dad;'>Bug Track</h1><hr />
+                    <p>A Bug has been resloved in the project <b>{context['project'].project_name}</b> titled <b>{context['bug'].head}</b>. Check it <a href="{base}mypage/bug/{context['bug'].id}/">out</a>
+                    </p><hr />
+                </body>
+            </html>
+        """
+
+    elif context["action"] == "bug_assignment":
+        subject = "A Bug has been assigned to you! 🤞"
+        text = f"""A bug has been assigned to you in {context['project'].project_name}"""
+        html = f"""\
+            <html>
+                <body style='text-align:center;'>
+                    <h1 style='color:#2d4dad;'>Bug Track</h1><hr />
+                    <p>A Bug has been assigned to you in the project <b>{context['project'].project_name}</b> titled <b>{context['bug'].head}</b>. Check it <a href="{base}mypage/bug/{context['bug'].id}/">out</a>
+                    </p><hr />
+                </body>
+            </html>
+        """
 
     if (subject != "") and (text != "") and (html != ""):
         for user in user_list:

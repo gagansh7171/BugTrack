@@ -45,8 +45,8 @@ class BugSForDash(serializers.ModelSerializer):
     assigned_to = serializers.StringRelatedField()
     class Meta:
         model = Bug
-        fields = ['id','project', 'assigned_to', 'creator', 'head', 'status', 'tag', 'date']
-        read_only_fields = ['date', 'creator']
+        fields = ['id','project', 'assigned_to', 'description', 'creator', 'head', 'status', 'tag', 'date']
+        read_only_fields = ['date', 'creator', 'project']
 
 
 class BugS(serializers.ModelSerializer):
@@ -56,12 +56,25 @@ class BugS(serializers.ModelSerializer):
     class Meta:
         model = Bug
         fields = ['id','project', 'assigned_to', 'creator', 'description', 'head', 'status', 'tag', 'date']
-        read_only_fields = ['date', 'creator', 'project']
+        read_only_fields = ['date', 'creator']
 
 
 class CommentsS(serializers.ModelSerializer):
     creator = serializers.PrimaryKeyRelatedField(read_only=True)
     bug = serializers.PrimaryKeyRelatedField(queryset=Bug.objects.all(),)
+    class Meta:
+        model = Comments
+        fields = ['id','creator', 'date', 'description', 'bug']
+        read_only_fields = ['date', 'creator']
+
+class UserSS(serializers.ModelSerializer):
+    profile = ProfileS()
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'profile']
+class CommentsSS(serializers.ModelSerializer):
+    creator = UserSS(read_only=True)
+    bug = serializers.PrimaryKeyRelatedField(queryset=Bug.objects.all(), )
     class Meta:
         model = Comments
         fields = ['id','creator', 'date', 'description', 'bug']

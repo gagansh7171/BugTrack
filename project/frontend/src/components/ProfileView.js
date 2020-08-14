@@ -1,5 +1,5 @@
 import React from 'react'
-import {Image, Grid, Loader } from 'semantic-ui-react'
+import {Image, Grid,} from 'semantic-ui-react'
 import axios from 'axios'
 import querystring from 'querystring'
 

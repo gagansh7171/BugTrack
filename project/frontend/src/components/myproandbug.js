@@ -1,5 +1,5 @@
 import React from 'react'
-import {Breadcrumb, Card, Ref, Icon} from 'semantic-ui-react'
+import {Breadcrumb, Ref, Icon} from 'semantic-ui-react'
 import axios from 'axios'
 
 import '../style/myproandbug.css'

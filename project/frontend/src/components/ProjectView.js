@@ -1,17 +1,19 @@
 import React from 'react'
-import {Grid, Image, Breadcrumb, Loader, Ref, Input, Icon, Popup} from 'semantic-ui-react'
+import {Grid, Image, Breadcrumb, Loader, Ref, Dropdown, Icon, Popup} from 'semantic-ui-react'
 import axios from 'axios'
-import querystring from 'querystring'
+import dompurify from 'dompurify'
+import parse from 'html-react-parser';
 
 import trash from '../assets/trash.png'
 import '../style/project.css'
 import '../style/myproandbug.css'
+
+const sanitizer2 = dompurify.sanitize;
 var mod = require('../style/color')
 
 
 var ref1 = React.createRef()
 var ref2 = React.createRef()
-var ref3 = React.createRef()
 
 class Members extends React.Component{
     constructor(props){
@@ -28,7 +30,6 @@ class Members extends React.Component{
                     b.push(val)
                 }
             this.setState({addmem:b})
-            console.log(this.state.addmem)
             var c = []
             const response2 = await axios.get('project/'+this.props.pid+'/team/')
             const users = response2.data
@@ -36,10 +37,9 @@ class Members extends React.Component{
                 c.push(val)
             }
             this.setState({mem : c})
-            console.log(this.state.mem)
         }
         catch{
-            window.location='/mypage/home'
+            // window.location='/mypage/home'
         }
         
     }
@@ -49,16 +49,8 @@ class Members extends React.Component{
         axios.get('/project/'+this.props.pid+'/ismember/').then( res => this.setState({ismem:res.data['member']}))
     }
     
-    onsubmit = (e,ref) => {
-        var r
-        for (var i = 0; i < this.state.addmem.length; i++){
-            if(ref.current.children[0].value == this.state.addmem[i].username){
-                r = this.state.addmem[i].id
-                break
-            }
-        }
-        console.log(r)
-        axios.patch('project/'+this.props.pid+'/addmember/', {teams : r }).then(res => {
+    onsubmit = (e,{value}) => {
+        axios.patch('project/'+this.props.pid+'/addmember/', {teams : value }).then(res => {
             console.log(res)
             this.update()
         }).catch(error =>
@@ -81,8 +73,13 @@ class Members extends React.Component{
     render(){
         let lists
         if(this.state.addmem){
-            lists = this.state.addmem.map( user => 
-            <option value={user.username} key={user.id}/>
+            lists = this.state.addmem.map( user => {
+                return {
+                    key:user.id,
+                    value:user.id,
+                    text:user.username
+                }
+            }
         )}
         let display = null
         if(this.state.mem){
@@ -90,11 +87,8 @@ class Members extends React.Component{
         display = 
             <div className='listofmem' >
                 {display}
-                { this.state.ismem && <><Ref innerRef={ref3}><Input list='users' placeholder='Add Members' action={{color: 'green', icon: 'plus', onClick: (e) => this.onsubmit(e,ref3)}}/></Ref>
+                { this.state.ismem && <><Dropdown selection search options={lists} placeholder='Add Members' onChange={this.onsubmit}/>
                 <br/>  <Popup content='Delete' position='right center' active trigger={<Image onClick={this.DeleteProject} src={trash} style={{marginTop:'10px'}}/>} />  </>}
-                <datalist id ='users'>
-                    {lists}
-                </datalist>
             </div>
         }
     return(
@@ -164,7 +158,7 @@ class ProjectView extends React.Component{
             this.setState({desc:project, load:false})
         }
         catch(err){
-            window.location = '/mypage/home'
+            // window.location = '/mypage/home'
         }
     }
 
@@ -184,7 +178,7 @@ class ProjectView extends React.Component{
             console.log(this.state.bug)
         }
         catch(err){
-            window.location = '/mypage/home'
+            // window.location = '/mypage/home'
         }
     }
 
@@ -215,7 +209,7 @@ class ProjectView extends React.Component{
                         <Grid.Row>
                             <Grid.Column width={12}>
                                 <div className='body-project'>
-                                    <div className='data-project'>{this.state.desc.wiki}</div>
+                                    <div className='data-project'>{parse(sanitizer2(this.state.desc.wiki))}</div>
                                 </div>
                             </Grid.Column>
                             <Grid.Column width={4}>
@@ -230,7 +224,13 @@ class ProjectView extends React.Component{
             display = this.state.bug.map( (eachbug) =>
                 <CardsForBug key={eachbug.id}  {...eachbug}/>
             )
-            display = <div className='card_group_bug'>{display}</div>
+            if(display.length){
+                display = <div className='card_group_bug projectView-card-group'>{display}</div>
+            }
+            else{
+                display = <><Icon name='thumbs up' size='big'/> NO Reported Bugs <Icon name='thumbs up' flipped='horizontally' size='big' /></>
+                
+            }
         }
 
         return(
