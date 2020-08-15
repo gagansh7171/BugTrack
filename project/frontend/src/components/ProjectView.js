@@ -1,12 +1,17 @@
 import React from 'react'
-import {Grid, Image, Breadcrumb, Loader, Ref, Dropdown, Icon, Popup} from 'semantic-ui-react'
+import {Grid, Image, Breadcrumb, Loader, Ref, Dropdown, Icon,Button, Popup, Message, Form} from 'semantic-ui-react'
 import axios from 'axios'
 import dompurify from 'dompurify'
 import parse from 'html-react-parser';
+import CKEditor from '@ckeditor/ckeditor5-react'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import randomstring from 'randomstring'
 
+import UploadAdapter from './extras/uploadAdapter'
 import trash from '../assets/trash.png'
 import '../style/project.css'
 import '../style/myproandbug.css'
+import '../style/projectcreate.css'
 
 const sanitizer2 = dompurify.sanitize;
 var mod = require('../style/color')
@@ -14,6 +19,7 @@ var mod = require('../style/color')
 
 var ref1 = React.createRef()
 var ref2 = React.createRef()
+var ref3 = React.createRef()
 
 class Members extends React.Component{
     constructor(props){
@@ -39,7 +45,7 @@ class Members extends React.Component{
             this.setState({mem : c})
         }
         catch{
-            // window.location='/mypage/home'
+            window.location='/mypage/home'
         }
         
     }
@@ -112,6 +118,10 @@ function Tag(props){
     )
 }
 
+function gotobug(e, id) {
+    window.location = '/mypage/bug/'+id+'/'
+}
+
 function CardsForBug(props){
     let index = (props.id-1) % 13
     let date = new Date(props.date)
@@ -131,7 +141,7 @@ function CardsForBug(props){
 
     }
     return(
-        <div className='card_contain_bug' style={{borderBottom: '4px solid '+mod.color[index]}}>
+        <div onClick = {(e) => gotobug(e, props.id)} className='card_contain_bug' style={{borderBottom: '4px solid '+mod.color[index]}}>
             <div className='card1_bug'>
                 <div className='sub_card1_bug'>{props.head}</div>
                 <Tag tag={props.tag} />
@@ -142,6 +152,106 @@ function CardsForBug(props){
     )
 }
 /************************************************************************************** */
+class CreateBugForm extends React.Component{
+    constructor(props){
+        super(props)
+        this.state = { tag : '', head:'', body:'', randid:randomstring.generate(), errTag:'', errHead:'', errBody:'', submiterr: false}
+    }
+    addBug = async (e) => {
+        e.preventDefault()
+
+        if(this.state.head === ""){
+            console.log('head null')
+            this.setState({errHead:'Bug Heading can not be null'})
+        }
+        else{
+            console.log(' head not null')
+            this.setState({errHead:''})
+        }
+        if(this.state.tag === ""){
+            this.setState({errTag:'Bug Tag can not be null'})
+        }else{
+            this.setState({errTag:''})
+        }
+        if(this.state.body === ""){
+            this.setState({errBody:'Bug Body can not be null'})
+        }else{
+            this.setState({errBody:''})
+        }
+        if(this.state.tag !=='' && this.state.head !=='' && this.state.body !==''){
+            try{
+                const formData = new FormData()
+                formData.append('project', this.props.project)
+                formData.append('description', this.state.body)
+                formData.append('head', this.state.head)
+                formData.append('tag', this.state.tag)
+                var res = await axios.post('bugs/',formData)
+                window.location = '/mypage/bug/'+res.data.id+'/'
+            }catch(err){
+                this.setState({submiterr:true})
+            }
+        }
+    }
+    render(){
+        let msg 
+        if(this.state.errHead!== '' || this.state.errBody !== '' ||this.state.errTag !== '' ){
+            msg = (
+                <Message negative >
+                    <h3>Invalid Inputs</h3>
+                    { this.state.errHead && <p>{this.state.errHead}</p>}
+                    {this.state.errBody && <p>{this.state.errBody}</p>}
+                    {this.state.errTag && <p>{this.state.errTag}</p>}
+                </Message>
+            )
+        }
+        if(this.state.submiterr){
+            msg = (
+                <Message negative header='Error!!!' content='Some error occured during creation of bug'/>
+            )
+        }
+
+        let tags = mod.tag.map( (tag, index) => {
+            return {
+                key: index,
+                value:index,
+                text:tag
+            }
+        })
+
+        return(
+            <>
+                <span className='head-project'>Report a new Bug</span>
+                <div className='Create-Project-container'>
+                <Form>
+                    <Form.Group>
+                        <Form.Input name='name' onChange={ (e) => { this.setState({head:e.target.value})}} placeholder='Bug Heading' width={6} />
+                    </Form.Group>
+                    
+                    <CKEditor
+                        editor={ ClassicEditor }
+                        data={this.state.body}
+                        onInit={editor=>{
+                            var randid = this.state.randid
+                            editor.plugins.get('FileRepository').createUploadAdapter = function(loader){
+                                return new UploadAdapter(loader, randid) 
+                            }
+                        }}
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            this.setState({body:data})
+                        } }
+                    />
+                </Form>
+                <Dropdown style={{marginTop:'10px'}} options={tags} placeholder='Tag' selection search onChange={(e, {value}) => {this.setState({tag : value})}}/> 
+                <div className='foot-button-bug'><Button color='green' onClick={(e) => this.addBug(e)}>Report</Button></div>
+                {msg}
+                </div>
+                
+            </>
+        )
+    }
+}
+/****************************************************************************** */
 class ProjectView extends React.Component{
     constructor(props){
         super(props)
@@ -158,7 +268,7 @@ class ProjectView extends React.Component{
             this.setState({desc:project, load:false})
         }
         catch(err){
-            // window.location = '/mypage/home'
+            window.location = '/mypage/home'
         }
     }
 
@@ -178,7 +288,7 @@ class ProjectView extends React.Component{
             console.log(this.state.bug)
         }
         catch(err){
-            // window.location = '/mypage/home'
+            window.location = '/mypage/home'
         }
     }
 
@@ -188,6 +298,9 @@ class ProjectView extends React.Component{
         }
         else if(ref==ref2){
             this.getBugData(ref)
+        }
+        else if(ref==ref3){
+            this.setState({choice : ref, load:false})
         }
     }
 
@@ -225,12 +338,16 @@ class ProjectView extends React.Component{
                 <CardsForBug key={eachbug.id}  {...eachbug}/>
             )
             if(display.length){
-                display = <div className='card_group_bug projectView-card-group'>{display}</div>
+                display = <div className='card_group_bug '>{display}</div>
             }
             else{
                 display = <><Icon name='thumbs up' size='big'/> NO Reported Bugs <Icon name='thumbs up' flipped='horizontally' size='big' /></>
                 
             }
+        }
+
+        if(this.state.choice==ref3){
+            display = <CreateBugForm project={this.state.desc.id} />
         }
 
         return(
@@ -241,6 +358,8 @@ class ProjectView extends React.Component{
                     <Ref innerRef={ref1}><Breadcrumb.Section link onClick={(e) => this.handleBread(e,ref1)} >Description</Breadcrumb.Section></Ref>
                     <Breadcrumb.Divider />
                     <Ref innerRef={ref2}><Breadcrumb.Section link onClick={(e) => this.handleBread(e,ref2)}>Bugs</Breadcrumb.Section></Ref>
+                    <Breadcrumb.Divider />
+                    <Ref innerRef={ref3}><Breadcrumb.Section link onClick={(e) => this.handleBread(e,ref3)}>Report Bug</Breadcrumb.Section></Ref>
                 </Breadcrumb>
                 <div className='date-project'><i>{date.toDateString()} {time[0]}</i></div>
                 {this.state.load ? <Loader active={true} size='massive'/> : display}

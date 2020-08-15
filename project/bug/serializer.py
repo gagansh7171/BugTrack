@@ -17,6 +17,11 @@ class ProfileS(serializers.ModelSerializer):
         fields = ['id','user', 'disabled', 'admin','enr',  'display_picture']
         read_only_fields = ['enr']
 
+class CKImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CKImages
+        fields = '__all__'
+
 class UserS(serializers.ModelSerializer):
 
     class Meta:
@@ -25,7 +30,7 @@ class UserS(serializers.ModelSerializer):
 
 class ProjectS(serializers.ModelSerializer):
 
-    teams = serializers.PrimaryKeyRelatedField(queryset=User.objects.all() , many=True, read_only=False)
+    teams = serializers.PrimaryKeyRelatedField(queryset=User.objects.all() , many=True, allow_null=True ,read_only=False, required=False)
     class Meta:
         model = Projects
         fields = ['id','project_name', 'wiki', 'date', 'teams']

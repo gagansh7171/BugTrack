@@ -4,6 +4,7 @@ from .views import *
 
 app_name = 'bug'
 router = DefaultRouter()
+router.register('images', CKimageViewSet, basename='images')
 router.register('photo', PhotoViewSet,basename='photo') 
 router.register('user', UserViewSet, basename='user')
 router.register('project', ProjectViewSet, basename='projects')

@@ -4,6 +4,7 @@ import MyProAndBug from '../myproandbug'
 import Search from '../Search'
 import Team from '../Team'
 import Profile from '../Profile'
+import ProjectCreate from '../ProjectCreate'
 import '../../style/canvas.css'
 
 class Canvas extends React.Component{
@@ -16,7 +17,7 @@ class Canvas extends React.Component{
             return <div className='canvas'><MyProAndBug/></div>
         }
         else if(this.props.item==1){
-
+            return <div className='canvas'><ProjectCreate/></div>
         }
         else if(this.props.item==2){
             return <div className='canvas'><Search/></div>

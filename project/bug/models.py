@@ -61,3 +61,7 @@ class Comments(models.Model):
         return self.creator.username + ' ' + self.description[:15]
     class Meta:
         ordering = ['-date']
+
+class CKImages(models.Model):
+    imagehash = models.CharField(max_length=100)
+    url = models.ImageField(upload_to='uploads/')

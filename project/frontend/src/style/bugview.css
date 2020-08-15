@@ -23,3 +23,6 @@
     width: 100%;
     margin-top:10px;
 }
+.ck-editor__editable_inline {
+    min-height: 150px !important
+}

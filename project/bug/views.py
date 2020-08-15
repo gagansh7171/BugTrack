@@ -25,6 +25,9 @@ class PhotoViewSet(viewsets.ModelViewSet):
     serializer_class = ProfilePhotoS
     permission_classes = [isSelfPhoto]
 
+class CKimageViewSet(viewsets.ModelViewSet):
+    queryset = CKImages.objects.all()
+    serializer_class = CKImagesSerializer
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Projects.objects.all()

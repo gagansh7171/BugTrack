@@ -1,10 +1,13 @@
 import React from 'react'
 import axios from 'axios'
 import {Loader, Grid, Image, Icon,Button, Dropdown, Accordion} from 'semantic-ui-react'
-import CKEditor from 'ckeditor4-react';
+import CKEditor from '@ckeditor/ckeditor5-react'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import dompurify from 'dompurify'
-import parse from 'html-react-parser';
+import parse from 'html-react-parser'
+import randomstring from 'randomstring'
 
+import UploadAdapter from './extras/uploadAdapter'
 import '../style/bugview.css'
 import '../style/project.css'
 
@@ -54,7 +57,7 @@ class Info extends React.Component{
             response = await axios.get('bugs/'+this.props.bug.id+'/')
             this.setState({bug:response.data})
         }catch(err){
-            console.log(err)
+            window.location = '/' 
         }
     }
     componentDidMount(){
@@ -97,6 +100,7 @@ class Info extends React.Component{
         return (
             <>
                 <div>Project : {this.props.bug.project}</div> 
+                <div style={{marginTop:'10px'}}>Reporter : {this.state.bug.creator}</div>
                 <div style={{marginTop:'10px'}}>Assigned to : {this.state.bug.assigned_to}<span>&nbsp;&nbsp;&nbsp;</span>
                     {this.props.member && <><Icon name='settings' size='small'/> <Dropdown search selection options={lists} placeholder='Assign bug' onChange={this.assignchange}/> </>}
                 
@@ -114,7 +118,7 @@ class Info extends React.Component{
 class BugView extends React.Component{
     constructor(props){
         super(props)
-        this.state = {load:true, member: false,bug:'', comments:'', commentdata:'Add a new Comment', showcomments:false}
+        this.state = {load:true, member: false,bug:'', comments:'',randid:randomstring.generate() ,commentdata:'Add a new Comment', showcomments:false}
     }
 
     async componentDidMount(){
@@ -125,10 +129,9 @@ class BugView extends React.Component{
             this.setState({bug: response.data})
             response = await axios.get('bugs/'+this.props.match.params.bugId+'/comments/')
             this.setState({comments : response.data, load:false})
-            console.log(this.state.comments)
         }
         catch(err){
-            // window.location = '/' 
+            window.location = '/' 
             
         }
     }
@@ -138,13 +141,22 @@ class BugView extends React.Component{
     }
 
     updatecomments = async () => {
-        var response = await axios.get('bugs/'+this.props.match.params.bugId+'/comments/')
-        this.setState({comments : response.data, load:false})
+        try{
+            var response = await axios.get('bugs/'+this.props.match.params.bugId+'/comments/')
+            this.setState({comments : response.data, load:false, commentdata:'Add new Comment'})
+        }catch(err){
+            window.location = '/' 
+        }
     }
 
-    addComment = () => {
-        axios.post('comments/', {bug:this.state.bug.id, description : this.state.commentdata}).then( res => console.log(res)).catch(err => console.log(err))
-        this.updatecomments()
+    addComment = async () => {
+        try{
+            var res = await axios.post('/comments/', {bug:this.state.bug.id, description : this.state.commentdata}, )
+            console.log(res)
+            this.updatecomments()
+        }catch(err){
+            window.location = '/' 
+        }
     }
 
     render(){
@@ -182,10 +194,17 @@ class BugView extends React.Component{
                 <div className='date-project'><i>{date.toDateString()} {time[0]}</i></div>
                 {this.state.load ? <Loader active={true} size='massive'/> : display}
                 <CKEditor
+                    editor={ ClassicEditor }
                     data={this.state.commentdata}
-                    onChange={ ( event ) => {
-                        const data = event.editor.getData();
-                        this.setState({commentdata : data})
+                    onInit={editor=>{
+                        var randid = this.state.randid
+                        editor.plugins.get('FileRepository').createUploadAdapter = function(loader){
+                            return new UploadAdapter(loader, randid) 
+                        }
+                    }}
+                    onChange={ ( event, editor ) => {
+                        const data = editor.getData();
+                        this.setState({commentdata:data})
                     } }
                 />
                 <div className='foot-button-bug'><Button color='green' onClick={this.addComment}>Comment</Button></div>

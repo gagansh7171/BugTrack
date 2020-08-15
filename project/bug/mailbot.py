@@ -6,13 +6,11 @@ from email.mime.multipart import MIMEMultipart
 sender_email = 'gagansh7171@gmail.com'
 password = "wabgfkmgfwtrxwht"
 
-context = ssl.create_default_context()
-server = smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context)
-# with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-server.login(sender_email, password)
-
 def sendmail(receiver, message):
-    server.sendmail(sender_email, receiver, message.as_string())
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver, message.as_string())
     
 
 

@@ -47,6 +47,10 @@ function Tag(props){
     )
 }
 
+function gotobug(e, id) {
+    window.location = '/mypage/bug/'+id+'/'
+}
+
 function CardsForBug(props){
     let index = (props.id-1) % 13
     let date = new Date(props.date)
@@ -66,7 +70,7 @@ function CardsForBug(props){
 
     }
     return(
-        <div className='card_contain_bug' style={{borderBottom: '4px solid '+mod.color[index]}}>
+        <div onClick = {(e) => gotobug(e, props.id)} className='card_contain_bug' style={{borderBottom: '4px solid '+mod.color[index]}}>
             <div className='card1_bug'>
                 <div className='sub_card1_bug'>{props.head}</div>
                 <Tag tag={props.tag} />
