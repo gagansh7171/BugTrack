@@ -40,7 +40,7 @@ class Mypage extends React.Component{
                             
                         </Switch>
                     </Router>
-                    <div className='footer item3'>Star this project at Github <a href='https://github.com'> <Icon name='github square' color='green' /></a> </div>
+                    <div className='footer item3'>Star this project at Github <a href='https://github.com/gagansh7171/Bug-Track-App' target='_'> <Icon name='github square' color='green' /></a> </div>
                 </React.Fragment>
             )
         }

@@ -3,6 +3,9 @@ import {Icon, Image, Loader} from 'semantic-ui-react'
 import axios from'axios'
 
 import '../style/admin.css'
+import '../style/avatar.css'
+
+var mod = require('../style/color')
 
 class Members extends React.Component{
     constructor(props){
@@ -17,7 +20,12 @@ class Members extends React.Component{
         let display = this.props.mem.map( user => {
             return (
                 <div key={user.id} onClick={(e) => this.gotouser(e, user.id)} className='item'>
-                    <div className='card_1'><div className='subcard_1 '>{user.username}</div> <div style={{flex:'1'}}><Image circular size='tiny' src={user.display_picture}/></div></div>
+                    <div className='card_1'><div className='subcard_1 '>{user.username}</div> <div style={{flex:'1'}}>
+                        {user.display_picture==='http://localhost:8000/media/pic/default_profile_photo.jpeg' ? 
+                                <div class='avatar-circle' style={{backgroundColor : mod.color[user.id % 13]}}><span class='initials'>{user.fname[0]}{user.lname[0]}</span></div> 
+                                : <Image src={user.display_picture} circular size='tiny'/>
+                        }
+                        </div></div>
                     <div className='card_2'>E-mail : {user.email}</div>
                     <div className ='card_3'>{ user.admin && <b>Admin</b>} {user.disabled && <b>Disabled</b>}</div>
                 </div>

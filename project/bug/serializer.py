@@ -78,6 +78,7 @@ class UserSS(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'profile']
 class CommentsSS(serializers.ModelSerializer):
+
     creator = UserSS(read_only=True)
     bug = serializers.PrimaryKeyRelatedField(queryset=Bug.objects.all(), )
     class Meta:

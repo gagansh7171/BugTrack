@@ -363,6 +363,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
                 b = serializer.data
                 b['username'] = username
                 b['userid'] = user.id
+                b['fname'] = user.first_name
+                b['lname'] = user.last_name
                 return JsonResponse(b)  
             else:
                 return HttpResponseForbidden()
@@ -400,8 +402,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
                 a={}
                 i=0
                 for b in serializer.data:
-                    b['username'] = User.objects.get(id=b['user']).username
-                    b['email'] = User.objects.get(id=b['user']).email
+                    user_object = User.objects.get(id=b['user'])
+                    b['username'] = user_object.username
+                    b['email'] = user_object.email
+                    b['fname'] = user_object.first_name
+                    b['lname'] = user_object.last_name
                     a[i] = dict(b)
                     i=i+1
                 return JsonResponse(a)
@@ -416,8 +421,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
                 a={}
                 i=0
                 for b in serializer.data:
-                    b['username'] = User.objects.get(id=b['user']).username
-                    b['email'] = User.objects.get(id=b['user']).email
+                    user_object = User.objects.get(id=b['user'])
+                    b['username'] = user_object.username
+                    b['email'] = user_object.email
+                    b['fname'] = user_object.first_name
+                    b['lname'] = user_object.last_name
                     a[i] = dict(b)
                     i=i+1
                 return JsonResponse(a)
@@ -438,12 +446,15 @@ class MembersOfProject(APIView):
         a = User.objects.filter(projects=pk).values('profile__id')
         b = [ Profile.objects.get(id=i['profile__id']) for i in a]
         c = ProfileS(b,context={"request": request}, many=True)
-
+        
         a={}
         i=0
         for b in c.data:
-            b['username'] = User.objects.get(id=b['user']).username
-            b['email'] = User.objects.get(id=b['user']).email
+            user_object = User.objects.get(id=b['user'])
+            b['username'] = user_object.username
+            b['email'] = user_object.email
+            b['fname'] = user_object.first_name
+            b['lname'] = user_object.last_name
             a[i] = dict(b)
             i=i+1
 

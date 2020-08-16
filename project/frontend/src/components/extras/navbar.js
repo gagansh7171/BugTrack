@@ -2,9 +2,12 @@ import React, {Component} from 'react'
 import {Loader,Image, Dropdown, Dimmer } from 'semantic-ui-react'
 import logo from '../../assets/logo.png'
 import axios from 'axios'
-import '../../style/home.css'
 import store from '../../store/store'
 import { connect } from 'react-redux'
+
+import '../../style/profile.css'
+import '../../style/home.css'
+var mod = require('../../style/color')
 
 class Navbar extends Component{
 
@@ -53,7 +56,10 @@ class Navbar extends Component{
                 const trigger = (
                     <span>
                         {this.props.user['username']} <span>&nbsp;&nbsp;</span>
-                        <Image src={this.props.user['display_picture']} avatar />
+                        {this.props.user.display_picture==='http://localhost:8000/media/pic/default_profile_photo.jpeg' ? 
+                            <div class='avatar-circle' style={{backgroundColor : mod.color[this.props.user.id % 13],verticalAlign:'middle', width:'42px', height:'42px', display:'inline-block'}}><span class='initials_nav'>{this.props.user.fname[0]}{this.props.user.lname[0]}</span></div> 
+                            : <Image src={this.props.user.display_picture} avatar/>
+                        }
                     </span>
                 )
                 

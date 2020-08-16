@@ -4,7 +4,9 @@ import axios from 'axios'
 import querystring from 'querystring'
 
 import '../style/profile.css'
+import '../style/avatar.css'
 
+var mod = require('../style/color')
 
 class ProfileView extends React.Component{
     constructor(props){
@@ -25,8 +27,11 @@ class ProfileView extends React.Component{
             <div className='profilecard' >
             <Grid columns={2} divided stackable textAlign='center'>
                 <Grid.Row>
-                    <Grid.Column>
-                        <Image src={this.state.user.display_picture} circular size='small'/>
+                    <Grid.Column className='avatar_for_profile_img'>
+                        {this.state.user.display_picture==='http://localhost:8000/media/pic/default_profile_photo.jpeg' ? 
+                                <div class='avatar-circle' style={{backgroundColor : mod.color[this.state.user.id % 13]}}><span class='initials'>{this.state.user.fname[0]}{this.state.user.lname[0]}</span></div> 
+                                : <Image src={this.state.user.display_picture} circular size='small'/>
+                        }
                     </Grid.Column>
                     <Grid.Column>
                         <div className='data-profile'>
