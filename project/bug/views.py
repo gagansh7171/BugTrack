@@ -472,6 +472,10 @@ class CommentsOnBugs(APIView):
         serializer = CommentsSS(Bug.objects.get(pk=pk).comments.all(), many=True, context={"request": request})
         return Response(serializer.data)
 
+class CommentViewSetFromConsumer(APIView):
+    def get(self, request, pk):
+        serializer = CommentsSS(Comments.objects.get(pk=pk), context={"request": request})
+        return Response(serializer.data)
 
 from django.shortcuts import render
 

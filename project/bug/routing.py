@@ -1,7 +1,7 @@
 from django.urls import re_path
 
-from . import consumers
+from .consumers import CommentConsumer
 
 websocket_urlpatterns = [
-    re_path(r'ws/bug/(?P<pk>\d+)/$', consumers.CommentConsumer)
+    re_path(r'ws/bug/(?P<pk>\d+)/$', CommentConsumer)
 ]

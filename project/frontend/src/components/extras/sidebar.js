@@ -37,7 +37,7 @@ class Sidebar extends React.Component{
     }
 
     windowsize = (refs) =>{
-        if(window.innerWidth < 660){
+        if(window.innerWidth < 796){
 
             refs.map(ref => 
                 {ref.current.children[0].classList.remove('huge')

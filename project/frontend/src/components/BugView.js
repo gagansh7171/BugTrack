@@ -6,6 +6,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import dompurify from 'dompurify'
 import parse from 'html-react-parser'
 import randomstring from 'randomstring'
+import _ from "lodash" 
 
 import UploadAdapter from './extras/uploadAdapter'
 import '../style/bugview.css'
@@ -17,16 +18,26 @@ const sanitizer1 = dompurify.sanitize;
 class Comments extends React.Component{
     constructor(props){
         super(props)
+        this.state = {com:[]}
+    }
+    static getDerivedStateFromProps(nextProps, prevState) {
+        console.log('prvstate', prevState)
+        if(prevState.com !== nextProps.com){
+            console.log('updating comments')
+            return {com:nextProps.com}
+        }
+        return null
     }
     render(){
-        let display = this.props.com.map( com => 
+        let display = this.state.com.map( com => 
             {
                 let date = new Date(com.date)
                 let time = date.toTimeString().split(' ')
                 return <div className='comment'><Image src={com['creator']['profile']['display_picture']} size='mini' verticalAlign='middle'/> @<i>{com['creator']['username']}</i><br/><br/>{parse(sanitizer1(com['description']))}<div className='date-project'><i>{date.toDateString()} {time[0]}</i></div></div>
         })
-        return(
-            <div className='comment-contain'>{display}</div>
+        return(<>
+                <div className='comment-contain'>{display}</div>
+            </>
         )
     }
 }
@@ -119,9 +130,34 @@ class BugView extends React.Component{
     constructor(props){
         super(props)
         this.state = {load:true, member: false,bug:'', comments:'',randid:randomstring.generate() ,commentdata:'Add a new Comment', showcomments:false}
+        
+        let url= 'ws://localhost:8000/ws/bug/'+this.props.match.params.bugId+'/'
+
+        this.ws = new WebSocket(url)
+
+        this.ws.onopen = () => {
+            console.log("******Connected**********")
+        }
     }
 
     async componentDidMount(){
+
+        this.ws.onmessage= async (event) => {
+            let result = JSON.parse(event.data)
+            var newcommentslist = _.cloneDeep(this.state.comments)
+            console.log('earlier newlist',newcommentslist)
+            var response = await axios.get('consumer/'+result.comment+'/comment/')
+            console.log('response',response.data)
+            newcommentslist.unshift(response.data)
+            console.log('state',this.state.comments)
+            console.log('new',newcommentslist)
+            this.setState({comments : newcommentslist, commentdata:'Add new Comment'})
+            console.log('ahhahahahahahahaah')
+            
+        }
+        this.ws.onclose= () => {
+            console.log('**********socket closed unexpectedly*********** ')
+        }
         try {
             var response = await axios.get('bugs/'+this.props.match.params.bugId+'/team/')
             this.setState({member : response.data['member']})
@@ -129,33 +165,35 @@ class BugView extends React.Component{
             this.setState({bug: response.data})
             response = await axios.get('bugs/'+this.props.match.params.bugId+'/comments/')
             this.setState({comments : response.data, load:false})
+            console.log(this.state.comments)
         }
         catch(err){
-            window.location = '/' 
+            // window.location = '/' 
             
         }
     }
+
     handleCommentShow = () => {
         var a = this.state.showcomments
         this.setState({showcomments : !a})
     }
 
-    updatecomments = async () => {
-        try{
-            var response = await axios.get('bugs/'+this.props.match.params.bugId+'/comments/')
-            this.setState({comments : response.data, load:false, commentdata:'Add new Comment'})
-        }catch(err){
-            window.location = '/' 
-        }
-    }
+    // updatecomments = async () => {
+    //     try{
+    //         var response = await axios.get('bugs/'+this.props.match.params.bugId+'/comments/')
+    //         this.setState({comments : response.data, load:false, commentdata:'Add new Comment'})
+    //     }catch(err){
+    //         // window.location = '/' 
+    //     }
+    // }
 
     addComment = async () => {
         try{
             var res = await axios.post('/comments/', {bug:this.state.bug.id, description : this.state.commentdata}, )
-            console.log(res)
-            this.updatecomments()
+            this.ws.send(JSON.stringify({comment_id: res.data['id']}))
+            console.log(res.data.id)
         }catch(err){
-            window.location = '/' 
+            // window.location = '/' 
         }
     }
 
