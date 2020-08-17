@@ -277,7 +277,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
         try:
             roles = response2['person']['roles']
             user = Profile.objects.get(enr=response2['student']['enrolmentNumber']).user
-            login(request=request, user=user)
+            if user.profile.disabled==False:
+                login(request=request, user=user)
             # print('***************************************************exists')
             return HttpResponse('exists')
         except Profile.DoesNotExist:
@@ -301,6 +302,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
                 first_name = name[0]
                 last_name = name[1]
                 username = str(''.join(random.choices(string.ascii_uppercase + string.digits, k = 15)))
+                print(username)
 
                 user = User.objects.create(
                     is_superuser=False,

@@ -28,6 +28,13 @@ class UserS(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username']
 
+class GetProjectNameS(serializers.ModelSerializer):
+
+    class Meta:
+        model = Projects
+        fields = ['id','project_name']
+
+
 class ProjectS(serializers.ModelSerializer):
 
     teams = serializers.PrimaryKeyRelatedField(queryset=User.objects.all() , many=True, allow_null=True ,read_only=False, required=False)
@@ -46,7 +53,7 @@ class ProjectSforTeam(serializers.ModelSerializer):
 
 class BugSForDash(serializers.ModelSerializer):
     creator = serializers.StringRelatedField(read_only=True)
-    project = serializers.StringRelatedField(read_only=True)
+    project = GetProjectNameS(read_only=True)
     assigned_to = serializers.StringRelatedField()
     class Meta:
         model = Bug

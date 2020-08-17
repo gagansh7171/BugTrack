@@ -59,13 +59,13 @@ function CardsForBug(props){
     if (props.comingfrom==0){
         use =
             <div className='card2_bug'>
-            <div>Project : {props.project} <br></br>Creator : {props.creator}</div> <div>{time[0]} {date.toDateString()}</div>
+            <div>Project : {props.project.project_name} <br></br>Creator : {props.creator}</div> <div>{time[0]} {date.toDateString()}</div>
             </div>
     }
     else {
         use =
             <div className='card2_bug'>
-            <div>Project : {props.project}<br></br> Assigned To : {props.assigned_to}</div> <div>{time[0]} {date.toDateString()}</div>
+            <div>Project : {props.project.project_name}<br></br> Assigned To : {props.assigned_to}</div> <div>{time[0]} {date.toDateString()}</div>
             </div>
 
     }

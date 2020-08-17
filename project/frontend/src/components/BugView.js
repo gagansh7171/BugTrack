@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import {Loader, Grid, Image, Icon,Button, Dropdown, Accordion} from 'semantic-ui-react'
+import {Loader, Grid, Image, Icon,Button, Dropdown, Accordion, Popup} from 'semantic-ui-react'
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import dompurify from 'dompurify'
@@ -11,6 +11,7 @@ import _ from "lodash"
 import UploadAdapter from './extras/uploadAdapter'
 import '../style/bugview.css'
 import '../style/project.css'
+import trash from '../assets/trash.png'
 
 var mod = require('../style/color')
 const sanitizer1 = dompurify.sanitize;
@@ -21,9 +22,9 @@ class Comments extends React.Component{
         this.state = {com:[]}
     }
     static getDerivedStateFromProps(nextProps, prevState) {
-        console.log('prvstate', prevState)
+        
         if(prevState.com !== nextProps.com){
-            console.log('updating comments')
+            
             return {com:nextProps.com}
         }
         return null
@@ -90,6 +91,10 @@ class Info extends React.Component{
         axios.put('bugs/'+this.props.bug.id+'/status/')
         this.update()
     }
+    DeleteBug = (e) => {
+        axios.delete('bugs/'+this.state.bug.id+'/')
+        window.location='/mypage/project/'+ this.state.bug.project.id
+    }
     render(){
         let lists = []
         if(this.state.members){
@@ -110,7 +115,7 @@ class Info extends React.Component{
         })
         return (
             <>
-                <div>Project : {this.props.bug.project}</div> 
+                <div>Project : {this.props.bug.project.project_name}</div> 
                 <div style={{marginTop:'10px'}}>Reporter : {this.state.bug.creator}</div>
                 <div style={{marginTop:'10px'}}>Assigned to : {this.state.bug.assigned_to}<span>&nbsp;&nbsp;&nbsp;</span>
                     {this.props.member && <><Icon name='settings' size='small'/> <Dropdown search selection options={lists} placeholder='Assign bug' onChange={this.assignchange}/> </>}
@@ -121,6 +126,7 @@ class Info extends React.Component{
                         
                 </div>
                 <div style={{marginTop:'10px'}}>Tag : <Tag tag={this.state.bug.tag}/><span>&nbsp;&nbsp;&nbsp;</span>{this.props.member && <Dropdown options={tags} trigger={<Icon name='settings' size='small'/>} onChange={this.tagchange}/> }</div>
+                <br/> {this.props.member && <Popup content='Delete' position='right center' active trigger={<Image onClick={this.DeleteBug} src={trash} style={{marginTop:'10px'}}/>} />}
             </>
         )
     }
@@ -145,15 +151,12 @@ class BugView extends React.Component{
         this.ws.onmessage= async (event) => {
             let result = JSON.parse(event.data)
             var newcommentslist = _.cloneDeep(this.state.comments)
-            console.log('earlier newlist',newcommentslist)
+
             var response = await axios.get('consumer/'+result.comment+'/comment/')
-            console.log('response',response.data)
+
             newcommentslist.unshift(response.data)
-            console.log('state',this.state.comments)
-            console.log('new',newcommentslist)
-            this.setState({comments : newcommentslist, commentdata:'Add new Comment'})
-            console.log('ahhahahahahahahaah')
-            
+
+            this.setState({comments : newcommentslist, commentdata:'Add new Comment'})        
         }
         this.ws.onclose= () => {
             console.log('**********socket closed unexpectedly*********** ')
@@ -165,10 +168,9 @@ class BugView extends React.Component{
             this.setState({bug: response.data})
             response = await axios.get('bugs/'+this.props.match.params.bugId+'/comments/')
             this.setState({comments : response.data, load:false})
-            console.log(this.state.comments)
         }
         catch(err){
-            // window.location = '/' 
+            window.location = '/' 
             
         }
     }
@@ -178,22 +180,12 @@ class BugView extends React.Component{
         this.setState({showcomments : !a})
     }
 
-    // updatecomments = async () => {
-    //     try{
-    //         var response = await axios.get('bugs/'+this.props.match.params.bugId+'/comments/')
-    //         this.setState({comments : response.data, load:false, commentdata:'Add new Comment'})
-    //     }catch(err){
-    //         // window.location = '/' 
-    //     }
-    // }
-
     addComment = async () => {
         try{
             var res = await axios.post('/comments/', {bug:this.state.bug.id, description : this.state.commentdata}, )
             this.ws.send(JSON.stringify({comment_id: res.data['id']}))
-            console.log(res.data.id)
         }catch(err){
-            // window.location = '/' 
+            window.location = '/' 
         }
     }
 

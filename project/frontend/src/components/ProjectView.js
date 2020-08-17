@@ -52,7 +52,7 @@ class Members extends React.Component{
 
     componentDidMount(){
         this.update()
-        axios.get('/project/'+this.props.pid+'/ismember/').then( res => this.setState({ismem:res.data['member']}))
+        this.setState({ismem:this.props.ismem})
     }
     
     onsubmit = (e,{value}) => {
@@ -130,13 +130,13 @@ function CardsForBug(props){
     if (props.comingfrom==0){
         use =
             <div className='card2_bug'>
-            <div>Project : {props.project} <br></br>Creator : {props.creator}</div> <div>{time[0]} {date.toDateString()}</div>
+            <div>Project : {props.project.project_name} <br></br>Creator : {props.creator}</div> <div>{time[0]} {date.toDateString()}</div>
             </div>
     }
     else {
         use =
             <div className='card2_bug'>
-            <div>Project : {props.project}<br></br> Assigned To : {props.assigned_to}</div> <div>{time[0]} {date.toDateString()}</div>
+            <div>Project : {props.project.project_name}<br></br> Assigned To : {props.assigned_to}</div> <div>{time[0]} {date.toDateString()}</div>
             </div>
 
     }
@@ -255,13 +255,13 @@ class CreateBugForm extends React.Component{
 class ProjectView extends React.Component{
     constructor(props){
         super(props)
-        this.state = {choice:undefined, desc:'', bug:'',addmem:'', load:true}
+        this.state = {choice:undefined, desc:'', bug:'',addmem:'',ismem:false, load:true}
     }
 
     async componentDidMount(){
         ref1.current.classList.add('active')
-
         this.setState({choice:ref1})
+        axios.get('/project/'+this.props.match.params.projectId +'/ismember/').then( res => this.setState({ismem:res.data['member']}))
         try {
             const response = await axios.get('project/' + this.props.match.params.projectId +'/')
             const project = response.data
@@ -327,7 +327,7 @@ class ProjectView extends React.Component{
                             </Grid.Column>
                             <Grid.Column width={4}>
                                 <div className='head-project'>Members</div>
-                                <Members pid={this.state.desc.id}/>
+                                <Members ismem={this.ismem} pid={this.state.desc.id}/>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
@@ -353,7 +353,7 @@ class ProjectView extends React.Component{
         return(
             
             <div className='middle-project'>
-                <div className='head-project'>{this.state.desc.project_name}</div>
+                <div className='head-project'>{this.state.desc.project_name} {this.state.ismem && <div className='setting' onClick={()=>{window.location='/mypage/projectedit/'+this.state.desc['id']}}><Icon size='small' name='settings'/></div>}</div>
                 <Breadcrumb size='big'>
                     <Ref innerRef={ref1}><Breadcrumb.Section link onClick={(e) => this.handleBread(e,ref1)} >Description</Breadcrumb.Section></Ref>
                     <Breadcrumb.Divider />
