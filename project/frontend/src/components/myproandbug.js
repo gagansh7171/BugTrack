@@ -184,7 +184,12 @@ class MyProAndBug extends React.Component{
             display = this.state.data.map( (project) =>
                 <Cards key={project.id} {...project} />
             )
-            display = <div className='card_group'>{display}</div>
+            if(display.length){
+                display = <div className='card_group'>{display}</div>
+            }
+            else{
+                display = <div style={{marginTop:'15px'}}><Icon flipped='horizontally' name='exclamation' size='big'/> You are not a part of any project <Icon name='exclamation' size='big' /></div>
+            }
         }
 
         if(this.state.choice==ref2){
@@ -192,8 +197,12 @@ class MyProAndBug extends React.Component{
             display = this.state.data.map( (bug) =>
                 <CardsForBug key={bug.id} {...bug} comingfrom={comingfrom}/>
             )
-            
-            display = <div className='card_group_bug'>{display}</div>
+            if(display.length){
+                display = <div className='card_group_bug'>{display}</div>
+            }
+            else{
+                display = <div style={{marginTop:'15px'}}><Icon name='thumbs up' size='big'/> NO Assigned Bugs <Icon name='thumbs up' flipped='horizontally' size='big' /></div>
+            }
         }
 
         if(this.state.choice==ref3){
@@ -202,7 +211,12 @@ class MyProAndBug extends React.Component{
                 <CardsForBug key={bug.id} {...bug} comingfrom={comingfrom}/>
             )
             
-            display = <div className='card_group_bug'>{display}</div>
+            if(display.length){
+                display = <div className='card_group_bug'>{display}</div>
+            }
+            else{
+                display = <div style={{marginTop:'15px'}}><Icon flipped='horizontally' name='question' size='big'/> NO Reported Bugs <Icon name='question'  size='big' /></div>
+            }
         }
 
         if(this.state.error){
