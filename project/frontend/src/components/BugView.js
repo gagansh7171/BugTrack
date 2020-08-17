@@ -12,6 +12,7 @@ import UploadAdapter from './extras/uploadAdapter'
 import '../style/bugview.css'
 import '../style/project.css'
 import trash from '../assets/trash.png'
+import '../style/avatar.css'
 
 var mod = require('../style/color')
 const sanitizer1 = dompurify.sanitize;
@@ -34,7 +35,13 @@ class Comments extends React.Component{
             {
                 let date = new Date(com.date)
                 let time = date.toTimeString().split(' ')
-                return <div className='comment'><Image src={com['creator']['profile']['display_picture']} size='mini' verticalAlign='middle'/> @<i>{com['creator']['username']}</i><br/><br/>{parse(sanitizer1(com['description']))}<div className='date-project'><i>{date.toDateString()} {time[0]}</i></div></div>
+                return <div className='comment'>
+                    {com['creator']['profile']['display_picture']==='http://localhost:8000/media/pic/default_profile_photo.jpeg' ? 
+                                <div class='avatar-circle' style={{backgroundColor : mod.color[com.creator.profile.id % 13], verticalAlign:'middle', width:'42px', height:'40px', display:'inline-block'}}><span class='initials' style={{'fontSize':'20px','top':'-3px' }}>{com.creator.first_name[0]}{com.creator.last_name[0]}</span></div> 
+                                : <Image src={com['creator']['profile']['display_picture']} size='mini' verticalAlign='middle'/>
+                        }
+                    
+                     @<i>{com['creator']['username']}</i><br/><br/>{parse(sanitizer1(com['description']))}<div className='date-project'><i>{date.toDateString()} {time[0]}</i></div></div>
         })
         return(<>
                 <div className='comment-contain'>{display}</div>
@@ -69,7 +76,7 @@ class Info extends React.Component{
             response = await axios.get('bugs/'+this.props.bug.id+'/')
             this.setState({bug:response.data})
         }catch(err){
-            window.location = '/' 
+            // window.location = '/' 
         }
     }
     componentDidMount(){
@@ -170,7 +177,7 @@ class BugView extends React.Component{
             this.setState({comments : response.data, load:false})
         }
         catch(err){
-            window.location = '/' 
+            // window.location = '/' 
             
         }
     }
@@ -185,7 +192,7 @@ class BugView extends React.Component{
             var res = await axios.post('/comments/', {bug:this.state.bug.id, description : this.state.commentdata}, )
             this.ws.send(JSON.stringify({comment_id: res.data['id']}))
         }catch(err){
-            window.location = '/' 
+            // window.location = '/' 
         }
     }
 

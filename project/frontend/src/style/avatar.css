@@ -7,7 +7,7 @@
 .avatar-circle {
     width: 100px;
     height: 100px;
-    background-color: green;
+    /* background-color: green; */
     text-align: center;
     border-radius: 50%;
     -webkit-border-radius: 50%;

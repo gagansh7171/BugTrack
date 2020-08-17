@@ -2,9 +2,10 @@ import threading
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from decouple import config
 
-sender_email = 'gagansh7171@gmail.com'
-password = "wabgfkmgfwtrxwht"
+sender_email = config('EMAIL')
+password = config('APP_PASS')
 
 def sendmail(receiver, message):
     context = ssl.create_default_context()

@@ -83,7 +83,7 @@ class UserSS(serializers.ModelSerializer):
     profile = ProfileS()
     class Meta:
         model = User
-        fields = ['id', 'username', 'profile']
+        fields = ['id', 'username', 'profile', 'first_name', 'last_name']
 class CommentsSS(serializers.ModelSerializer):
 
     creator = UserSS(read_only=True)

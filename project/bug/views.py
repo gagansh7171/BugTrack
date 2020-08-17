@@ -13,6 +13,7 @@ import requests
 import string 
 import random 
 from .mailbot import *
+from decouple import config
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -258,8 +259,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
             return HttpResponseBadRequest()
         
         data = {
-            'client_id': 'InkEzNrdetKn6grsh3bEzumxUXKwVXgwxZxg2BDo',
-            'client_secret': 'tF0joMwszxHRuNPZSQAzo1wzHA5qhFVPWStg959ZcrY4HJg4gDOKXvcAUjSn4jSY56aZ8LVF09EK3ps5KOqZMRH9TNhX4bKs2le2D4NTkmRR83RKmkcsRYGoGhONUl1d',
+            'client_id': config('CLIENT_ID'),
+            'client_secret': config('CLIENT_SECRET'),
             'grant_type': 'authorization_code',
             'redirect_url': 'http://localhost:3000/loggit/',
             'code': auth

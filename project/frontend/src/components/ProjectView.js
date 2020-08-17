@@ -327,7 +327,7 @@ class ProjectView extends React.Component{
                             </Grid.Column>
                             <Grid.Column width={4}>
                                 <div className='head-project'>Members</div>
-                                <Members ismem={this.ismem} pid={this.state.desc.id}/>
+                                <Members ismem={this.state.ismem} pid={this.state.desc.id}/>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
