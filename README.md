@@ -46,5 +46,36 @@ For the project **Frontend** I learned how to use:
   env/bin/activate
   ```
   * Using SQL create database bug.
-  * 
+  * Navigate inside the cloned repository and install the required dependencies using 
+  ```
+  pip install -r requirements.txt
+  ```
+  * Create a settings.ini file in project folder as given in [the example](./project/settings.ini.example)
+  * navigate to [frontend](./project/frontend/) directory
+  * Then run commands 
+  ```
+  npm install
+  ```
+  * Navigate to parent directory and use the following command to set up a redis backing store:
+  ```
+  docker run -p 6379:6379 -d redis:5
+  ```
+  Note : Running this command may end up giving you this error
+  > docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post http://%2Fvar%2Frun%2Fdocker.sock/v1.35/containers/create: dial unix /var/run/docker.sock: connect: permission denied.See 'docker run --help'.
+  
+  To solve it create the docker group 
+  ```
+  sudo groupadd docker
+  ```
+  Add your user to the group
+  ```
+  sudo usermod -aG docker $USER
+  ```
+  You may need to reboot for following command to work
+  ```
+  newgrp docker
+  ```
+  ```
+  docker run hello-world
+  ```
   
