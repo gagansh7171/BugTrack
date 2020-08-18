@@ -10,6 +10,7 @@ Bug Tracking App designed especially for [IMG](https://github.com/IMGIITRoorkee)
   * A section for My teams
   * Profile Page for every user which can be visited with proper url like any other website
   * Completely Responsive design
+  * Deletion of previous profile photo from server on changing dp to save space
 
 For the project **Backend** I learned how to use:
 - [x] [Django](https://www.djangoproject.com/)
