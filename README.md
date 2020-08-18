@@ -37,7 +37,7 @@ For the project **Frontend** I learned how to use:
 -----------------
 ## Setup Instructions <br/>
   * Clone this repository.
-  * Setup the virtual enviornment by navigating to the parent of base directory and then run the command
+  * Setup the virtual enviornment by navigating to the base directory and then run the command
   ```
   virtualenv env
   ```
@@ -46,9 +46,9 @@ For the project **Frontend** I learned how to use:
   env/bin/activate
   ```
   * Using SQL create database bug.
-  * Navigate inside the cloned repository and install the required dependencies using 
+  * Install the required dependencies using 
   ```
-  pip install -r requirements.txt
+  pip install -r Requirements.txt
   ```
   * Create a settings.ini file in project folder as given in [the example](./project/settings.ini.example)
   * navigate to [frontend](./project/frontend/) directory
@@ -78,4 +78,16 @@ For the project **Frontend** I learned how to use:
   ```
   docker run hello-world
   ```
+  Now above command will work well.
   
+  * Navigate to frontend folder and use `npm start`
+  * Go to the parent folder and use `python manage.py runserver`
+  * visit [here](http://localhost:3000/)
+-----------------
+## Learning Resources for beginners<br/>
+ * For Redux you can visit [CSS-Tricks](https://css-tricks.com/learning-react-redux/) and [VALENTINO's blog](https://www.valentinog.com/blog/redux/).
+ * For a good grasp on React's lifecycle methods visit [here](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+ * React's [documentation](https://reactjs.org/docs/getting-started.html) is more than sufficient to kick start your React-App.
+ * Django's poll app [tutorial](https://docs.djangoproject.com/en/3.1/intro/tutorial01/) is good enough to give you knowledge of django's terminologies and usage.
+ * I found this axios [cheatsheet](https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index) really helpful.
+ * For django channels you can checkout official [tutorial](https://channels.readthedocs.io/en/latest/tutorial/index.html) and [Real Python](https://realpython.com/getting-started-with-django-channels/)
