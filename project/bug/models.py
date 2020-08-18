@@ -9,7 +9,7 @@ class Profile(models.Model):
     disabled = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
     enr = models.IntegerField(default=0)
-    display_picture = models.ImageField(upload_to='pic/', default='/pic/default_profile_photo.jpeg')
+    display_picture = models.ImageField(upload_to='pic/', default='pic/default_profile_photo.jpeg')
 
     def __str__(self):
         return self.user.username
@@ -22,11 +22,14 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
         old_file = sender.objects.get(pk=instance.pk).display_picture
     except sender.DoesNotExist:
         return False
-
+    
     new_file = instance.display_picture
-    if not old_file == new_file:
-        if os.path.isfile(old_file.path):
-            os.remove(old_file.path)
+    try :
+        if not old_file == new_file:
+            if os.path.isfile(old_file.path):
+                os.remove(old_file.path)
+    except:
+        pass
 
 class Projects(models.Model):
     project_name = models.CharField(max_length=37, unique=True)
