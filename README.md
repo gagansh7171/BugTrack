@@ -23,7 +23,7 @@ For the project **Backend** I learned how to use:
 For the project **Frontend** I learned how to use:
 - [x] [React.JS](https://reactjs.org/)
 - [x] [React Redux](https://react-redux.js.org/)
-- [x] [Reac Router](https://reactrouter.com/)
+- [x] [React Router](https://reactrouter.com/)
 - [x] [CKeditor-React](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/frameworks/react.html)
 - [x] write uploadAdapter for image support in CKeditor
 - [x] [Axios](https://github.com/axios/axios)
