@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Rosario:ital@1&display=swap');
+.admin1{
+    height: 80vh;
+    font-family: 'Rosario', sans-serif;
+    text-align: center;
+    font-size: 3em;
+    padding-top:25px;
+    overflow: auto;
+}
+.admin2{
+    margin-top: 23px;
+    font-size: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 300px);
+    justify-content: center;
+    gap: 15px 25px;
+}
+.item{
+    border-radius: 15px;
+    height: 200px;
+    width : 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid rgb(200,200,200);
+    padding: 1%;
+    text-align: center;
+}
+.card_1{
+    flex:7;;
+    overflow:hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(200,200,200);
+}
+.subcard_1{
+    font-family: 'Rosario', sans-serif;
+    flex:1;
+    overflow-wrap: break-word;
+    overflow: scroll;
+}
+.subcard_1::-webkit-scrollbar{
+    display:none;
+}
+
+.subcard_1{
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.card_2{
+
+    margin-top: 15px;
+    flex:2;
+    color:black;
+}
+.card_3{
+    flex:2;
+    color:black;
+}
+.item:hover{
+    box-shadow : 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.errorForSearch{
+    margin-top: 100px;
+    font-size: x-large;
+    display: flex;
+    justify-content: center;
+}
+.gridForSearch{
+    grid-template-columns: repeat(auto-fill, 300px);
+    justify-content: center;
+    gap: 15px 25px;
+    display:grid;
+}
+.projectTeam{
+    font-family: 'Rosario', sans-serif;
+    text-align: center;
+    font-size: 3em;
+    padding-bottom:25px;
+    margin-top: 25px;
+}

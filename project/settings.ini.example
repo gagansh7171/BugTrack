@@ -1,0 +1,12 @@
+[settings]
+DEBUG=True
+SECRET_KEY=secret_key
+
+DB_USER=sql_user
+DBPASS=sql_password
+
+EMAIL=gmail_id
+APP_PASS=gmail_app_password
+
+CLIENT_ID=oauth_client_id
+CLIENT_SECRET=oauth_client_secret

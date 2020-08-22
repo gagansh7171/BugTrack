@@ -1,0 +1,24 @@
+.item_side{
+    width: min-content;
+}
+
+i.icon{
+    margin-right: 0px;
+}
+.side{ 
+    height: 100%;
+    display:flex;
+    flex-direction: column;
+    width:min-content;
+    justify-content: space-between;
+    background-color: #1dba0f; 
+    /*done*/
+    /* background-color: #26ba18 */
+}
+.middle{
+    height: 80vh;
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+}
+

@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Rosario:ital@1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noticia+Text:ital@1&display=swap');
+.middle-project{
+    margin-top: 25px;
+    min-height: 77vh;
+    padding-left: max(3%, 10px);
+    padding-right: max(1%, 10px);
+    margin-bottom: 10px;
+}
+.body-project{
+    margin-top: 10px;
+    height: 100%;
+    max-height: 67vh;
+    overflow: auto;
+}
+.head-project{
+    font-family: 'Rosario', sans-serif;
+    font-size: 37px;
+    font-weight: 500;
+    overflow-wrap: break-word;
+    line-height: 1em;
+    width: 72%;padding-bottom: 10px;
+    
+}
+.date-project{
+    color: rgb(150, 150, 150);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.data-project{
+    line-height: 1.5em;
+    font-size: 1.5em;
+    overflow-wrap: break-word;
+    font-family: 'Noticia Text', serif;
+}
+
+.members-project{
+    margin-bottom: 10px;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.card_group_bug{
+    width:100%;
+    overflow: auto;
+}
+.listofmem{
+    overflow:auto;
+    max-height:58vh;
+}
+.setting{
+    vertical-align: middle;
+    position: relative;
+    float: right;
+}

@@ -9,7 +9,7 @@ class Profile(models.Model):
     disabled = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
     enr = models.IntegerField(default=0)
-    display_picture = models.ImageField(upload_to='pic/', default='pic/default_profile_photo.jpeg')
+    display_picture = models.ImageField(upload_to='pic/', default='/pic/default_profile_photo.jpeg')
 
     def __str__(self):
         return self.user.username

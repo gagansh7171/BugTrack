@@ -1,0 +1,34 @@
+.avatar_for_profile_img{
+    align-items: center;
+    justify-content: center;
+    display:flex !important;
+}
+
+.avatar-circle {
+    width: 100px;
+    height: 100px;
+    /* background-color: green; */
+    text-align: center;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+}
+
+  .initials {
+    position: relative;
+    top: 25px;
+    font-size: 50px; 
+    line-height: 50px; 
+    color: #fff;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+  }
+  .initials_nav {
+    position: relative;
+    top:10px;
+    font-size: 30px; 
+    line-height: 25px; 
+    color: #fff;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+  }

@@ -1,0 +1,28 @@
+.middle-bugview{
+    margin-top: 25px;
+    min-height: 77vh;
+    padding-left: max(3%, 10px);
+    padding-right: max(1%, 10px);
+    margin-bottom: 10px;
+    overflow: auto;
+}
+.comment-contain{
+    display: flex;
+    flex-direction: column;
+}
+.comment{
+    width:80%;
+    padding : 10px;
+    overflow-wrap: break-word;
+    margin-top: 10px;
+    border-bottom : 2px solid rgb(150,150,150);
+}
+.foot-button-bug{
+    display:flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    margin-top:10px;
+}
+.ck-editor__editable_inline {
+    min-height: 150px !important
+}
