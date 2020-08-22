@@ -51,6 +51,7 @@ Extras:
   FLUSH PRIVILEGES;
   ```
   * Create database bug.
+  * Change [docker-compose.yaml](./docker-compose.yaml) accordingly.
   * Create settings.ini as given in the [example](./project/settings.ini.example)
   * Make sure ports 6379, 8000, 3000 are not in use.
   * Now navigate to Bug-Track-Master.
