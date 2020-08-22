@@ -16,9 +16,9 @@ services:
       - MYSQL_PORT=3306
       - MYSQL_ROOT_HOST=%
       - MYSQL_DATABASE=bug
-      - MYSQL_USER=docker
-      - MYSQL_PASSWORD=helloiitr
-      - MYSQL_ROOT_PASSWORD=helloiitr
+      - MYSQL_USER=<<username>>
+      - MYSQL_PASSWORD=<<password>>
+      - MYSQL_ROOT_PASSWORD=<<rootpassword>>
     ports:
       - "3302:3306"
     networks:
