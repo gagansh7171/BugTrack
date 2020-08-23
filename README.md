@@ -63,6 +63,7 @@ Extras:
   * visit [here](http://localhost:3000/)
 -----------------
 ## Learning Resources for beginners<br/>
+ * [Dockerize](https://medium.com/@gagansh7171/dockerize-your-django-and-react-app-68a7b73ab6e9?sk=f285da192ec695afdb1583ea42f94427) your app.
  * For Redux you can visit [CSS-Tricks](https://css-tricks.com/learning-react-redux/) and [VALENTINO's blog](https://www.valentinog.com/blog/redux/).
  * For a good grasp on React's lifecycle methods visit [here](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
  * React's [documentation](https://reactjs.org/docs/getting-started.html) is more than sufficient to kick start your React-App.
