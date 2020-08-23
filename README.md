@@ -42,7 +42,7 @@ Extras:
 -----------------
 ## Setup Instructions <br/>
   * Clone this repository.
-  * This app is dockerized and connects to local mysql, so you need to make a new user for that.
+  * This app is dockerized and connects to local mysql, if you do not have a user which has access to mysql via any host then you need to make a new user for that.
   ```
   mysql -u root -p
 
